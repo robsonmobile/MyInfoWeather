@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">MyInfoWeather</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="weather_title">Sun</string>
+    <string name="weather_temp">25 °C</string>
+    <string name="weather_max_temp">25 °C</string>
+    <string name="weather_min_temp">25 °C</string>
+    <string name="weather_description">Description</string>
+    <string name="weather_additional_data_text">Extra Data</string>
+    <string name="weather_humidity">Humidicity:</string>
+    <string name="weather_pressure">Pressure</string>
+    <string name="weather_city">City</string>
+    <string name="btn_search_city">Search</string>
+    <string name="weather_city_edit_text_hint">Type the city or zip code</string>
+    <string name="weather_current_location_title">Current Location</string>
+
+</resources>

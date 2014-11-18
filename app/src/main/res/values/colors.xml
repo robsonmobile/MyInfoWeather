@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_btn_border_search">#009999</color>
+    <color name="color_btn_highlight_search">#DBD9D9</color>
+    <color name="color_btn_background_search">@android:color/transparent</color>
+
+
+</resources>
