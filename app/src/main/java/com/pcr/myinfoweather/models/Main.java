@@ -1,7 +1,4 @@
-package com.pcr.myinfoweather.models.weather;
-
-import com.pcr.myinfoweather.utils.Constants;
-import com.pcr.myinfoweather.utils.SharedPreferencesData;
+package com.pcr.myinfoweather.models;
 
 import java.util.HashMap;
 import java.util.Map;

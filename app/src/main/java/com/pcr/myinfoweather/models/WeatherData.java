@@ -1,11 +1,4 @@
-package com.pcr.myinfoweather.models.weather;
-
-import com.pcr.myinfoweather.models.weather.Clouds;
-import com.pcr.myinfoweather.models.weather.Coord;
-import com.pcr.myinfoweather.models.weather.Main;
-import com.pcr.myinfoweather.models.weather.Sys;
-import com.pcr.myinfoweather.models.weather.Weather;
-import com.pcr.myinfoweather.models.weather.Wind;
+package com.pcr.myinfoweather.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.pcr.myinfoweather.models.weather;
+package com.pcr.myinfoweather.models;
 
 import com.google.gson.annotations.Expose;
 

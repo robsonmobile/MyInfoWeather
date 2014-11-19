@@ -1,4 +1,4 @@
-package com.pcr.myinfoweather.models.weather;
+package com.pcr.myinfoweather.models;
 
 import java.util.HashMap;
 import java.util.Map;
