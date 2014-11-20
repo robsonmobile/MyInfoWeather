@@ -41,7 +41,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     card_view:cardCornerRadius="3dp"
-                    card_view:cardMaxElevation="5dp">
+                    card_view:cardMaxElevation="2dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                             android:layout_gravity="center"
                             android:text="@string/weather_title"
                             android:textSize="20sp"
-                            android:layout_marginBottom="5dp"
+                            android:layout_marginBottom="10dp"
                             android:id="@+id/weatherTitle"/>
 
                         </LinearLayout>
@@ -245,7 +245,6 @@
                                 android:layout_weight="1"
                                 android:hint="@string/weather_city_edit_text_hint"
                                 android:id="@+id/cityField"
-                                android:focusable="false"
                                 />
 
                             <Button

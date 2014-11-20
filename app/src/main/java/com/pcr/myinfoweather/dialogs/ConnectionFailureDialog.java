@@ -3,6 +3,7 @@ package com.pcr.myinfoweather.dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,8 @@ public class ConnectionFailureDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle(R.string.title_connection_failure_dialog);
         builder.setMessage(R.string.message_connection_failure_dialog);
         builder.setPositiveButton(R.string.message_retry, new DialogInterface.OnClickListener() {
             @Override
@@ -51,4 +54,6 @@ public class ConnectionFailureDialog extends DialogFragment {
         }
 
     }
+
+
 }

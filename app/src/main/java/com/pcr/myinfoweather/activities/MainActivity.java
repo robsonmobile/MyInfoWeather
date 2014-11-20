@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,6 +35,8 @@ import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.utils.SharedPreferencesData;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,11 +50,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private TextView tempMin;
     private TextView weatherTitle;
     private TextView weatherLocationCity;
+    private EditText cityField;
     private ImageView maxTempIcon;
     private ImageView minTempIcon;
     private ProgressBar loadingMediumTemp;
     private ProgressBar loadingMaxTemp;
     private ProgressBar loadingMinTemp;
+    private Button btnSearch;
     private String weatherCity;
     private String weatherCountry;
     private String weatherTitleText;
@@ -70,17 +75,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private float longitude;
     private LocationRequest mLocationRequest;
     private String city;
+    private String state;
+    private String sublocality;
+    private String country;
     private ConnectionFailureDialog dialog;
+    private int requestType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Button btn = (Button) findViewById(R.id.btnSearchCity);
-        btn.setOnClickListener(this);
-
         setupViews();
+        btnSearch.setOnClickListener(this);
+        cityField.setOnClickListener(this);
+        cityField.clearFocus();
+        btnSearch.requestFocus();
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
@@ -90,17 +99,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         SharedPreferencesData prefs = new SharedPreferencesData(this);
         tempPreference = prefs.getTempPreferenceData();
         mLocationClient = new LocationClient(this, this, this);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        requestType = Constants.PATH_FOR_GEOLOCATION;
+        cityField.clearFocus();
+        btnSearch.requestFocus();
         startLoading();
     }
 
     private void setupViews() {
         weatherTitle = (TextView) findViewById(R.id.weatherTitle);
         weatherLocationCity = (TextView) findViewById(R.id.weatherLocationText);
+        cityField = (EditText) findViewById(R.id.cityField);
         tempMedium = (TextView) findViewById(R.id.weatherTemp);
         tempMax = (TextView) findViewById(R.id.weatherTempMax);
         tempMin = (TextView) findViewById(R.id.weatherTempMin);
@@ -109,6 +123,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         loadingMediumTemp = (ProgressBar) findViewById(R.id.loadingMediumTemp);
         loadingMaxTemp = (ProgressBar) findViewById(R.id.loadingMaxTemp);
         loadingMinTemp = (ProgressBar) findViewById(R.id.loadingMinTemp);
+        btnSearch = (Button) findViewById(R.id.btnSearchCity);
     }
 
     private void getWeatherData() {
@@ -133,9 +148,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         weatherTitleText = weatherData.getWeather().get(0).getMain();
         weatherCity = weatherData.getName();
         weatherCountry = weatherData.getSys().getCountry();
-
-
-
     }
 
     private void setWeatherData() {
@@ -145,7 +157,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         tempMin.setText(String.valueOf(minTempText));
         weatherTitle.setText(weatherTitleText);
 
-        String completeLocation = weatherCity + ", " + city + " (" + weatherCountry + ")";
+        if(sublocality.equalsIgnoreCase(" ")) {
+            //TO DO
+            //city +
+        }
+        String completeLocation = sublocality + ", " + city + " (" + country + ")";
         weatherLocationCity.setText(completeLocation);
     }
 
@@ -156,7 +172,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     private String cityLocationPath(String city) {
-        return city;
+        URI uri = null;
+        try {
+            uri = new URI(city.replaceAll(" ", "%20"));
+        } catch (URISyntaxException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println("log uri: " + uri);
+        String completeCityPath = Constants.LOCAL_PATH + uri.toString() + Constants.COMMA_CHARACTER + state;
+        return completeCityPath;
     }
 
     private float convertTemperature(int type, float temperature) {
@@ -178,31 +203,91 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         return finalTemp;
     }
 
-    @Override
-    public void onConnected(Bundle bundle) {
-        if(mLocationClient.isConnected()) {
-            mCurrentLocation = mLocationClient.getLastLocation();
-            latitude = (float) mCurrentLocation.getLatitude();
-            longitude = (float) mCurrentLocation.getLongitude();
-        }
-
-        System.out.println("log long: " + longitude);
-        System.out.println("log lat: " + latitude);
-
+    private void getLocation(int typeSearch) {
+        city = null;
+        state = null;
+        sublocality = null;
+        country = null;
 
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        city = null;
-        try {
-            List<Address> list = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
 
-            if(list != null && list.size() > 0) {
-                Address address  = list.get(0);
-                city = address.getLocality();
+        //switch to get the location data based on city or lat/lon
+        switch (typeSearch) {
+            case Constants.PATH_FOR_CITY: {
+
+
+                try {
+                    //List<Address> list = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                    List<Address> list = geocoder.getFromLocationName("Medianeira", 1);//this is gonna pass the edittext typed value
+                    if (list != null && list.size() > 0) {
+                        Address address = list.get(0);
+                        city = address.getLocality();
+                        state = address.getAdminArea();
+                        sublocality = address.getSubLocality();
+                        country = address.getCountryName();
+                        if (city.equalsIgnoreCase(null)) {
+                            city = "";
+                        }
+                        if (state.equalsIgnoreCase(null)) {
+                            state = "";
+                        }
+
+
+                        System.out.println("log locatity: city" + city + " state: " + state + "sublocality: " + sublocality + "country: " + country);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            case Constants.PATH_FOR_GEOLOCATION:
+            {
+                if(mLocationClient.isConnected()) {
+                    mCurrentLocation = mLocationClient.getLastLocation();
+                    latitude = (float) mCurrentLocation.getLatitude();
+                    longitude = (float) mCurrentLocation.getLongitude();
+                }
+
+                try {
+                    List<Address> list = geocoder.getFromLocation(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude(), 1);
+                    if (list != null && list.size() > 0) {
+                        Address address = list.get(0);
+                        city = address.getLocality();
+                        state = address.getAdminArea();
+                        sublocality = address.getSubLocality();
+                        country = address.getCountryName();
+                        System.out.println("log location: city" + city + " state: " + state + "sublocality: " + sublocality + "country: " + country);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
-        performRequest(Constants.PATH_FOR_GEOLOCATION);
+
+        //Validate Strings: if null sets an empty character
+        city = validateLocationString(city);
+        state = validateLocationString(state);
+        sublocality = validateLocationString(sublocality);
+        country = validateLocationString(country);
+        System.out.println("log location: city" + city + " state: " + state + "sublocality: " + sublocality + "country: " + country);
+    }
+
+    private String validateLocationString(String text) {
+        String value = " ";
+        if(text == null) {
+            value = " ";
+        } else {
+            value = text;
+        }
+        System.out.println("log string value: " + value);
+        return value;
+
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        getLocation(requestType);
+        performRequest(requestType);
     }
 
     @Override
@@ -219,6 +304,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
         mLocationClient.connect();
+        cityField.clearFocus();
+        btnSearch.requestFocus();
     }
 
     @Override
@@ -236,6 +323,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             }
             startLoading();
             mLocationClient.connect();
+            requestType = Constants.PATH_FOR_CITY;
+        } else if(v.getId() == R.id.cityField) {
+            cityField.requestFocus();
+
+
         }
     }
 
@@ -250,8 +342,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 path = cityLocationPath("");
                 break;
         }
-
-
         AppHttpClient.get(path, null, new WeatherHttpResponseHandler.ResourceParserHandler() {
             @Override
             public void onSuccess(Object resource) {
@@ -271,20 +361,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 getWeatherData();
                 stopLoading();
                 setWeatherData();
-
-                dialog = new ConnectionFailureDialog();
-                dialog.show(getSupportFragmentManager(), "ConnectionFailureDialog");
             }
 
             @Override
             public void onFailure(Throwable e) {
                 System.out.println("log resource failure");
-
+                dialog = new ConnectionFailureDialog();
+                dialog.show(getSupportFragmentManager(), "ConnectionFailureDialog");
             }
 
             @Override
             public void onFailure(Throwable e, String errorMessage) {
-
+                dialog = new ConnectionFailureDialog();
+                dialog.show(getSupportFragmentManager(), "ConnectionFailureDialog");
             }
         });
     }
@@ -351,11 +440,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onNegativeClick(DialogFragment dialog) {
-
+        dialog.dismiss();
     }
 
     @Override
     public void setMessage(DialogFragment dialog) {
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(dialog != null) {
+            dialog.dismiss();
+        }
 
     }
 }

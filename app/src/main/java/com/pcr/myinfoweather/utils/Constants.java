@@ -11,7 +11,8 @@ public class Constants {
 
     /*** Paths ***/
     public static final String LOCATION_PATH = "";
-    public static final String LOCAL_PATH = "q=sao%20paulo,sp";
+    public static final String LOCAL_PATH = "q=";
+    public static final String COMMA_CHARACTER = ",";
     public static final String GEOLOCATION_PATH = "lat=-23&lon=-46";
     public static final String LATITUDE_PATH = "lat=";
     public static final String LONGITUDE_PATH = "&lon=";

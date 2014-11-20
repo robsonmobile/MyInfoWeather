@@ -17,7 +17,8 @@
     <string name="weather_city_edit_text_hint">Type the city or zip code</string>
     <string name="weather_current_location_title">Current Location</string>
     <string name="message_connection_failure_dialog">Unable to connect to the weather server</string>
-    <string name="message_retry">Try</string>
+    <string name="message_retry">Retry</string>
     <string name="message_cancel">Cancel</string>
+    <string name="title_connection_failure_dialog">Alert</string>
 
 </resources>
