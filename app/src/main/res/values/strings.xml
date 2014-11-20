@@ -20,5 +20,6 @@
     <string name="message_retry">Retry</string>
     <string name="message_cancel">Cancel</string>
     <string name="title_connection_failure_dialog">Alert</string>
+    <string name="toast_invalid_city_name">Invalid city name, please try again</string>
 
 </resources>

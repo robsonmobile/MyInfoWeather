@@ -9,6 +9,11 @@ public class LocationData {
     private float longitude;
     private String city;
     private String state;
+    private String country;
+    private String tempMedium;
+    private String tempMax;
+    private String tempMin;
+    private String title;
 
     public float getLatitude() {
         return latitude;
@@ -40,5 +45,45 @@ public class LocationData {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getTempMedium() {
+        return tempMedium;
+    }
+
+    public void setTempMedium(String tempMedium) {
+        this.tempMedium = tempMedium;
+    }
+
+    public String getTempMax() {
+        return tempMax;
+    }
+
+    public void setTempMax(String tempMax) {
+        this.tempMax = tempMax;
+    }
+
+    public String getTempMin() {
+        return tempMin;
+    }
+
+    public void setTempMin(String tempMin) {
+        this.tempMin = tempMin;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
