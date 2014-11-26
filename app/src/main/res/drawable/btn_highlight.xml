@@ -6,7 +6,8 @@
                android:shape="rectangle">
             <solid android:color="@color/color_btn_highlight_search"/>
             <corners android:radius="2dp"/>
-            <stroke android:width="2dp"/>
+            <stroke android:width="2dp"
+                    android:color="@color/accent"/>
         </shape>
     </item>
 
@@ -16,7 +17,7 @@
             <solid android:color="@color/color_btn_background_search"/>
             <corners android:radius="2dp"/>
             <stroke android:width="2dp"
-                    android:color="@color/color_btn_border_search"/>
+                    android:color="@color/accent"/>
         </shape>
     </item>
 

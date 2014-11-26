@@ -10,8 +10,8 @@ public class Main {
 
     private float temp_min;
     private float temp;
-    private int humidity;
-    private int pressure;
+    private float humidity;
+    private float pressure;
     private float temp_max;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -56,7 +56,7 @@ public class Main {
      * @return
      * The humidity
      */
-    public int getHumidity() {
+    public float getHumidity() {
         return humidity;
     }
 
@@ -65,7 +65,7 @@ public class Main {
      * @param humidity
      * The humidity
      */
-    public void setHumidity(int humidity) {
+    public void setHumidity(float humidity) {
         this.humidity = humidity;
     }
 
@@ -74,7 +74,7 @@ public class Main {
      * @return
      * The pressure
      */
-    public int getPressure() {
+    public float getPressure() {
         return pressure;
     }
 
@@ -83,7 +83,7 @@ public class Main {
      * @param pressure
      * The pressure
      */
-    public void setPressure(int pressure) {
+    public void setPressure(float pressure) {
         this.pressure = pressure;
     }
 

@@ -1,34 +1,30 @@
 package com.pcr.myinfoweather.models;
 
 /**
- * Created by Paula on 08/11/2014.
+ * Created by Paula on 20/11/2014.
  */
 public class LocationData {
 
-    private float latitude;
-    private float longitude;
+    private float lat;
+    private float lon;
     private String city;
     private String state;
     private String country;
-    private String tempMedium;
-    private String tempMax;
-    private String tempMin;
-    private String title;
 
-    public float getLatitude() {
-        return latitude;
+    public float getLat() {
+        return lat;
     }
 
-    public void setLatitude(float latitude) {
-        this.latitude = latitude;
+    public void setLat(float lat) {
+        this.lat = lat;
     }
 
-    public float getLongitude() {
-        return longitude;
+    public float getLon() {
+        return lon;
     }
 
-    public void setLongitude(float longitude) {
-        this.longitude = longitude;
+    public void setLon(float lon) {
+        this.lon = lon;
     }
 
     public String getCity() {
@@ -53,37 +49,5 @@ public class LocationData {
 
     public void setCountry(String country) {
         this.country = country;
-    }
-
-    public String getTempMedium() {
-        return tempMedium;
-    }
-
-    public void setTempMedium(String tempMedium) {
-        this.tempMedium = tempMedium;
-    }
-
-    public String getTempMax() {
-        return tempMax;
-    }
-
-    public void setTempMax(String tempMax) {
-        this.tempMax = tempMax;
-    }
-
-    public String getTempMin() {
-        return tempMin;
-    }
-
-    public void setTempMin(String tempMin) {
-        this.tempMin = tempMin;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }

@@ -3,6 +3,10 @@
     <color name="color_btn_border_search">#009999</color>
     <color name="color_btn_highlight_search">#DBD9D9</color>
     <color name="color_btn_background_search">@android:color/transparent</color>
+    <color name="primary">#009688</color>
+    <color name="primaryDark">#004D40</color>
+    <color name="accent">#00BFA5</color>
+    <color name="textColorPrimary">#607D8B</color>
 
 
 </resources>
