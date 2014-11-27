@@ -35,6 +35,7 @@ import com.pcr.myinfoweather.utils.Constants;
 import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.utils.SharedPreferencesData;
 
+import org.apache.http.client.HttpResponseException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -345,7 +346,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         AppHttpClient.get(path, null, new WeatherHttpResponseHandler.ResourceParserHandler() {
             @Override
             public void onSuccess(Object resource) {
-                System.out.println("log resource" + resource);
+                System.out.println("log resource onsuccess" + resource);
+
+               // HttpResponseException exception = (HttpResponseException) throwable;
+
+
                 weatherData = new GsonBuilder().create()
                         .fromJson(resource.toString(), WeatherData.class);
 
@@ -365,6 +370,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             public void onFailure(Throwable e, String errorMessage) {
                 dialog = new ConnectionFailureDialog();
                 dialog.show(getSupportFragmentManager(), "ConnectionFailureDialog");
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                System.out.println("log erro onfailure: " + errorMessage);
+                if(errorMessage.equals("404")) {
+                    stopLoading();
+                    Toast.makeText(MainActivity.this, "Wrong City please try again", Toast.LENGTH_LONG).show();
+                    cityField.setText("");
+                    cityField.setHint("Type the city name");
+                }
+
             }
         });
     }

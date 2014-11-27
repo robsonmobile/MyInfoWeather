@@ -24,7 +24,10 @@ public class AppHttpClient {
     public static void get(String url, RequestParams params, WeatherHttpResponseHandler.ResourceParserHandler responseHandler) {
         setClientPresets();
         mClient.get(getAbsoluteUrl(url), params, WeatherHttpResponseHandler.getInstance(responseHandler));
+        ;
     }
+
+
 
     public static void getResource(String url, BinaryHttpResponseHandler responseHandler) {
         setClientPresets();

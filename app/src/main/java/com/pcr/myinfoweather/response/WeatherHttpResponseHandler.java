@@ -1,9 +1,12 @@
 package com.pcr.myinfoweather.response;
 
+import android.widget.Toast;
+
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -15,6 +18,7 @@ public class WeatherHttpResponseHandler extends JsonHttpResponseHandler{
         public void onSuccess(Object resource);
         public void onFailure(Throwable e);
         public void onFailure(Throwable e, String errorMessage);
+        public void onFailure(String errorMessage);
     }
 
     public interface BitmapParserHandler {
@@ -42,7 +46,20 @@ public class WeatherHttpResponseHandler extends JsonHttpResponseHandler{
 
     @Override
     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-        handler.onSuccess(response);
+        System.out.println("log status code: " + statusCode);
+        System.out.println("log response handler: " + response);
+        String cod = "cod";
+        try {
+            String obj = response.getString(cod);
+            System.out.println("log jsonobj: " + obj);
+            if(obj.equals("404")) {
+                handler.onFailure("404");
+            } else {
+                handler.onSuccess(response);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
