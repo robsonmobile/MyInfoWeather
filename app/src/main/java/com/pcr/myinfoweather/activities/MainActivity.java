@@ -120,6 +120,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
+
     }
 
     @Override
