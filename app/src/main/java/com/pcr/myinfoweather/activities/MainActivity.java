@@ -18,15 +18,15 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationRequest;
 import com.pcr.myinfoweather.R;
-import com.pcr.myinfoweather.dialogs.ConnectionFailureDialog;
-import com.pcr.myinfoweather.interfaces.IDialogConnectionFailure;
+import com.pcr.myinfoweather.dialogs.AlertDialogBuilder;
+import com.pcr.myinfoweather.dialogs.OptionsDialogBuilder;
+import com.pcr.myinfoweather.interfaces.IDialog;
 import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.models.WeatherData;
 import com.pcr.myinfoweather.request.AppHttpClient;
@@ -35,18 +35,16 @@ import com.pcr.myinfoweather.utils.Constants;
 import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.utils.SharedPreferencesData;
 
-import org.apache.http.client.HttpResponseException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, GooglePlayServicesClient.ConnectionCallbacks,
                                                                GooglePlayServicesClient.OnConnectionFailedListener,
-                                                               IDialogConnectionFailure {
+        IDialog {
 
     private WeatherData weatherData;
 
@@ -79,7 +77,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private String city;
     private String state;
     private String country;
-    private ConnectionFailureDialog dialog;
+    private AlertDialogBuilder dialogAlert;
+    private OptionsDialogBuilder dialogOptions;
     private int requestType;
     private String cityTypedSearch;
     private float weatherLat;
@@ -87,6 +86,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private static final int SEARCH_FLAG_GEO = 0;
     private static final int SEARCH_FLAG_CITY = 1;
     private LocationData locationData;
+    private CharSequence[] cityOptionsDialog;
+    private int selectedCityPosition;
+    private int dialogPosition;
+    private Address address;
+    private List<String> listCity;
+    private List<Address> listCityPosition;
+    private List<Address> listLocation;
 
 
     @Override
@@ -109,6 +115,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mLocationClient = new LocationClient(this, this, this);
 
         locationData = new LocationData();
+        dialogAlert = new AlertDialogBuilder();
+        dialogOptions = new OptionsDialogBuilder();
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
@@ -158,20 +166,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         weatherTitleText = weatherData.getWeather().get(0).getMain();
         weatherLat = weatherData.getCoord().getLat();
         weatherLon = weatherData.getCoord().getLon();
-
-        locationData.setLat(weatherLat);
-        locationData.setLon(weatherLon);
-
-        getLocation(locationData.getLat(), locationData.getLon());
-        System.out.println("log getlat: " + locationData.getLat());
-        System.out.println("log getlon: " + locationData.getLon());
-        System.out.println("log getcity: " + locationData.getCity());
-        System.out.println("log getstate: " + locationData.getState());
-        System.out.println("log getcountry: " + locationData.getCountry());
-
-
     }
 
+    private String formatCityString(String citySearch) {
+        return citySearch.replace(" ", "");
+    }
     private void setWeatherData() {
 
         //setar os dados do modelo (e nao de cada valor)
@@ -240,36 +239,76 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             locationData.setLon(longitude);
 
             System.out.println("log currentlocation: " + "lat: " + latitude + " long: " + longitude);
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                listLocation = geocoder.getFromLocation(latitude, longitude, 1);
+                if (listLocation != null && listLocation.size() > 0) {
+                    address = listLocation.get(0);
+                    state = address.getAdminArea();
+                    city = address.getSubAdminArea();
+                    country = address.getCountryCode();
+
+                    locationData.setCity(city);
+                    locationData.setState(state);
+                    locationData.setCountry(country);
+
+                    setWeatherData();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
     }
 
 
 
-    private void getLocation(float cityLat, float cityLong) {
+    private void getLocation(String cityName) {
         state = null;
         city = null;
         country = null;
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
-            List<Address> list = geocoder.getFromLocation(cityLat, cityLong, 1);
-            if (list != null && list.size() > 0) {
-                Address address = list.get(0);
-                state = address.getAdminArea();
-                city = address.getSubAdminArea();
-                country = address.getCountryCode();
+            listLocation = geocoder.getFromLocationName(cityName, 10);
+            listCity = new ArrayList<String>();
+            listCityPosition = new ArrayList<Address>();
+            if (listLocation != null && listLocation.size() > 0) {
+                if(listLocation.size() > 1) {
+                    for(int i = 0; i < listLocation.size(); i++) {
+                        address = listLocation.get(i);
+                        state = address.getAdminArea();
+                        city = address.getSubAdminArea();
+                        country = address.getCountryCode();
 
-                locationData.setCity(city);
-                locationData.setState(state);
-                locationData.setCountry(country);
+                        String addressCity = city + " - " + state + " - " + country;
+                        if(state != null && city != null && country != null) {
+                            listCity.add(addressCity);
+                            listCityPosition.add(listLocation.get(i));
+                        }
+
+                        System.out.println("log citydata: " + listCity);
+                    }
+                    dialogOptions.show(getSupportFragmentManager(), "cityOptionsDialog");
+                } else {
+                    System.out.println("log listaddress: " + listLocation);
+                    city = null;
+                    state = null;
+                    country = null;
+                    address = listLocation.get(0);
+                    state = address.getAdminArea();
+                    city = address.getSubAdminArea();
+                    country = address.getCountryCode();
+
+                    locationData.setCity(city);
+                    locationData.setState(state);
+                    locationData.setCountry(country);
+
+                    setWeatherData();
+                }
             }
         } catch (IOException e) {
                     e.printStackTrace();
         }
-
-        System.out.println("log city data: " + city + " state: " + state + " country: " + country);
-
-
     }
 
     private String validateLocationString(String text) {
@@ -286,7 +325,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onConnected(Bundle bundle) {
-
         getCurrentLocation();
         performRequest(requestType);
     }
@@ -340,6 +378,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 break;
             case Constants.PATH_FOR_CITY:
                 path = cityLocationPath(cityTypedSearch);
+                getLocation(formatCityString(cityField.getText().toString()));
                 break;
         }
 
@@ -347,10 +386,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onSuccess(Object resource) {
                 System.out.println("log resource onsuccess" + resource);
-
-               // HttpResponseException exception = (HttpResponseException) throwable;
-
-
                 weatherData = new GsonBuilder().create()
                         .fromJson(resource.toString(), WeatherData.class);
 
@@ -362,14 +397,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onFailure(Throwable e) {
                 System.out.println("log resource failure");
-                dialog = new ConnectionFailureDialog();
-                dialog.show(getSupportFragmentManager(), "ConnectionFailureDialog");
+                dialogAlert.show(getSupportFragmentManager(), "DialogConnectionFailure");
             }
 
             @Override
             public void onFailure(Throwable e, String errorMessage) {
-                dialog = new ConnectionFailureDialog();
-                dialog.show(getSupportFragmentManager(), "ConnectionFailureDialog");
+                dialogAlert.show(getSupportFragmentManager(), "DialogConnectionFailure");
             }
 
             @Override
@@ -378,14 +411,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 if(errorMessage.equals("404")) {
                     stopLoading();
                     Toast.makeText(MainActivity.this, "Wrong City please try again", Toast.LENGTH_LONG).show();
+
+                    dialogOptions.show(getSupportFragmentManager(), "DialogCitySearchFailure");
+                    System.out.println("log tag dialog: " + dialogOptions.getTag());
                     cityField.setText("");
                     cityField.setHint("Type the city name");
+
+
                 }
 
             }
         });
     }
-
 
     private String formatFloatNumber(float number) {
         return String.format(Locale.US, "%.1f", number);
@@ -452,14 +489,56 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    public void setMessage(DialogFragment dialog) {
+    public String setMessage(DialogFragment dialog) {
+        return "teste";
+    }
+
+    @Override
+    public String setTitle(DialogFragment dialog) {
+        return "teste2";
+
+    }
+
+    @Override
+    public CharSequence[] setItems(DialogFragment dialog) {
+        CharSequence charSequence[] = null;
+        if(dialog.getTag().equalsIgnoreCase("cityOptionsDialog")) {
+            cityOptionsDialog = listCity.toArray(new CharSequence[listCity.size()]);
+            charSequence = cityOptionsDialog;
+        }
+
+        return charSequence;
+    }
+
+    @Override
+    public int onSelectedItem(int position) {
+        Address address1 = listCityPosition.get(position);
+
+        locationData.setCity(address1.getSubAdminArea());
+        locationData.setState(address1.getAdminArea());
+        locationData.setCountry(address1.getCountryCode());
+
+        setWeatherData();
+
+        return selectedCityPosition;
+    }
+
+    public int getDialogPosition() {
+        return dialogPosition;
+    }
+
+    public void setDialogPosition(int dialogPosition) {
+        this.dialogPosition = dialogPosition;
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        if(dialog != null) {
-            dialog.dismiss();
+        if(dialogAlert != null) {
+            dialogAlert.dismiss();
+        }
+        if(dialogOptions != null) {
+            dialogOptions.dismiss();
         }
 
     }
