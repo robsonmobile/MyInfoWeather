@@ -58,6 +58,7 @@
             fab:fab_addButtonColorPressed="@color/floating_button_primary"
             fab:fab_addButtonPlusIconColor="@color/floating_button_plus_icon"
             android:layout_marginTop="70dp"
+            fab:fab_size="mini"
             android:layout_alignParentRight="true"
 
             >
