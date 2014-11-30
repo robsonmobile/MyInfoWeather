@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,23 +50,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private WeatherData weatherData;
 
     /******Ui Components******/
-    private TextView tempMedium;
     private TextView tempMax;
     private TextView tempMin;
     private TextView weatherTitle;
     private TextView weatherLocationCity;
+    private TextView weatherWind;
     private EditText cityField;
-    private ProgressBar loadingMediumTemp;
     private ProgressBar loadingMaxTemp;
     private ProgressBar loadingMinTemp;
+    private ProgressBar loadingWeatherImage;
+    private ProgressBar loadingWind;
     private Button btnSearch;
+    private ImageView weatherIcon;
     private String weatherTitleText;
-    private float mediumTemp;
     private float maxTemp;
     private float minTemp;
-    private String mediumTempText;
-    private String maxTempText;
-    private String minTempText;
     private static final String UNITY_TEMP_CELSIUS = " °C";
     private static final String UNITY_TEMP_FAHRENHEIT = " °F";
     private int tempPreference;
@@ -81,13 +80,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private OptionsDialogBuilder dialogOptions;
     private int requestType;
     private String cityTypedSearch;
-    private float weatherLat;
-    private float weatherLon;
     private static final int SEARCH_FLAG_GEO = 0;
     private static final int SEARCH_FLAG_CITY = 1;
     private LocationData locationData;
     private CharSequence[] cityOptionsDialog;
-    private int selectedCityPosition;
     private int dialogPosition;
     private Address address;
     private List<String> listCity;
@@ -136,55 +132,40 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         weatherTitle = (TextView) findViewById(R.id.weatherTitle);
         weatherLocationCity = (TextView) findViewById(R.id.weatherLocationText);
         cityField = (EditText) findViewById(R.id.cityField);
-        tempMedium = (TextView) findViewById(R.id.weatherTemp);
         tempMax = (TextView) findViewById(R.id.weatherTempMax);
         tempMin = (TextView) findViewById(R.id.weatherTempMin);
-        loadingMediumTemp = (ProgressBar) findViewById(R.id.loadingMediumTemp);
         loadingMaxTemp = (ProgressBar) findViewById(R.id.loadingMaxTemp);
         loadingMinTemp = (ProgressBar) findViewById(R.id.loadingMinTemp);
+        loadingWeatherImage = (ProgressBar) findViewById(R.id.loadingImageWeather);
+        loadingWind = (ProgressBar) findViewById(R.id.loadingWind);
         btnSearch = (Button) findViewById(R.id.btnSearchCity);
+        weatherIcon = (ImageView) findViewById(R.id.weatherIcon);
+        weatherWind = (TextView) findViewById(R.id.weatherWind);
     }
 
     private void getWeatherData() {
-        mediumTemp = weatherData.getMain().getTemp();
-        maxTemp = weatherData.getMain().getTempMax();
-        minTemp = weatherData.getMain().getTempMin();
-
-        mediumTemp = convertTemperature(tempPreference, mediumTemp);
-        maxTemp = convertTemperature(tempPreference, maxTemp);
-        minTemp = convertTemperature(tempPreference, minTemp);
+        maxTemp = convertTemperature(tempPreference, weatherData.getMain().getTempMax());
+        minTemp = convertTemperature(tempPreference, weatherData.getMain().getTempMin());
 
         if(tempPreference == Constants.TEMP_CELSIUS) {
-            mediumTempText = String.valueOf(mediumTemp) + UNITY_TEMP_CELSIUS;
-            maxTempText = String.valueOf(maxTemp)  + UNITY_TEMP_CELSIUS;
-            minTempText = String.valueOf(minTemp)  + UNITY_TEMP_CELSIUS;
+            tempMax.setText(String.valueOf(maxTemp)  + UNITY_TEMP_CELSIUS);
+            tempMin.setText(String.valueOf(minTemp)  + UNITY_TEMP_CELSIUS);
         } else {
-            mediumTempText = String.valueOf(mediumTemp) + UNITY_TEMP_FAHRENHEIT;
-            maxTempText = String.valueOf(maxTemp)  + UNITY_TEMP_FAHRENHEIT;
-            minTempText = String.valueOf(minTemp)  + UNITY_TEMP_FAHRENHEIT;
+            tempMax.setText(String.valueOf(maxTemp)  + UNITY_TEMP_FAHRENHEIT);
+            tempMin.setText(String.valueOf(minTemp)  + UNITY_TEMP_FAHRENHEIT);
         }
-
-        weatherTitleText = weatherData.getWeather().get(0).getMain();
-        weatherLat = weatherData.getCoord().getLat();
-        weatherLon = weatherData.getCoord().getLon();
-    }
-
-    private String formatCityString(String citySearch) {
-        return citySearch.replace(" ", "");
-    }
-    private void setWeatherData() {
-
-        //setar os dados do modelo (e nao de cada valor)
-        tempMedium.setText(mediumTempText);
-        tempMax.setText(maxTempText);
-        tempMin.setText(minTempText);
-        weatherTitle.setText(weatherTitleText);
 
         String completeLocation = locationData.getCity() + ", " + locationData.getState() +
                 ", " + locationData.getCountry();
 
+        weatherTitle.setText(weatherData.getWeather().get(0).getMain());
         weatherLocationCity.setText(completeLocation);
-        System.out.println("log values: " + completeLocation);
+        weatherWind.setText(String.valueOf(weatherData.getWind().getSpeed()));
+        weatherIcon.setImageResource(R.drawable.weather_rain_icon);
+    }
+
+    private String formatCityString(String citySearch) {
+        return citySearch.replace(" ", "");
     }
 
     private String geoLocationPath(float latitude, float longitude) {
@@ -253,7 +234,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     locationData.setState(state);
                     locationData.setCountry(country);
 
-                    setWeatherData();
+                    getWeatherData();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -303,25 +284,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                     locationData.setCity(city);
                     locationData.setState(state);
                     locationData.setCountry(country);
-
-                    setWeatherData();
+                    getWeatherData();
                 }
             }
         } catch (IOException e) {
                     e.printStackTrace();
         }
-    }
-
-    private String validateLocationString(String text) {
-        String value;
-        if(text == null) {
-            value = " ";
-        } else {
-            value = text;
-        }
-        System.out.println("log string value: " + value);
-        return value;
-
     }
 
     @Override
@@ -389,10 +357,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 System.out.println("log resource onsuccess" + resource);
                 weatherData = new GsonBuilder().create()
                         .fromJson(resource.toString(), WeatherData.class);
-
-                getWeatherData();
                 stopLoading();
-                setWeatherData();
+                getWeatherData();
             }
 
             @Override
@@ -431,26 +397,29 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private void startLoading() {
         //Loading Visible
-        loadingMediumTemp.setVisibility(View.VISIBLE);
         loadingMaxTemp.setVisibility(View.VISIBLE);
         loadingMinTemp.setVisibility(View.VISIBLE);
-
+        loadingWeatherImage.setVisibility(View.VISIBLE);
+        loadingWind.setVisibility(View.VISIBLE);
         //Temperature text and Icons Invisible
-        tempMedium.setVisibility(View.GONE);
         tempMax.setVisibility(View.GONE);
         tempMin.setVisibility(View.GONE);
-
+        weatherTitle.setVisibility(View.GONE);
+        weatherIcon.setVisibility(View.GONE);
+        weatherWind.setVisibility(View.GONE);
     }
 
     private void stopLoading() {
-        loadingMediumTemp.setVisibility(View.GONE);
         loadingMaxTemp.setVisibility(View.GONE);
         loadingMinTemp.setVisibility(View.GONE);
-
+        loadingWeatherImage.setVisibility(View.GONE);
+        loadingWind.setVisibility(View.GONE);
         //Temperature text and Icons Invisible
-        tempMedium.setVisibility(View.VISIBLE);
         tempMax.setVisibility(View.VISIBLE);
         tempMin.setVisibility(View.VISIBLE);
+        weatherTitle.setVisibility(View.VISIBLE);
+        weatherIcon.setVisibility(View.VISIBLE);
+        weatherWind.setVisibility(View.VISIBLE);
     }
 
 
@@ -519,9 +488,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         locationData.setState(address1.getAdminArea());
         locationData.setCountry(address1.getCountryCode());
 
-        setWeatherData();
+        getWeatherData();
 
-        return selectedCityPosition;
+        return 0;
     }
 
     public int getDialogPosition() {

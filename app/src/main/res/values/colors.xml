@@ -7,6 +7,7 @@
     <color name="primaryDark">#004D40</color>
     <color name="accent">#00BFA5</color>
     <color name="textColorPrimary">#607D8B</color>
-
+    <color name="floating_button_primary">#FFEA00</color>
+    <color name="floating_button_plus_icon">#9B9B8C</color>
 
 </resources>
