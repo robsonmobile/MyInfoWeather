@@ -28,6 +28,8 @@ public class Constants {
     public static final int PATH_FOR_GEOLOCATION = 0;
     public static final int PATH_FOR_CITY = 1;
 
-
+    /***Dialog Constants Tag***/
+    public static final String DIALOG_INTERNET_CONN_FAILURE = "internetConnectionFailure";
+    public static final String DIALOG_SERVER_CONN_FAILURE = "serverConnectionFailure";
 
 }

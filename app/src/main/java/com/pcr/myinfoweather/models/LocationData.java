@@ -11,6 +11,22 @@ public class LocationData {
     private String state;
     private String country;
 
+    private static LocationData locationDataInstance;
+
+    private LocationData() {
+        this.lat = 0;
+        this.lon = 0;
+        this.city = "";
+        this.state = "";
+        this.country = "";
+    }
+    public static LocationData getInstance() {
+        if(locationDataInstance == null) {
+            locationDataInstance = new LocationData();
+        }
+        return locationDataInstance;
+    }
+
     public float getLat() {
         return lat;
     }
