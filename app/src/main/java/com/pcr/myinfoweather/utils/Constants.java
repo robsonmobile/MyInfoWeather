@@ -16,10 +16,15 @@ public class Constants {
     public static final String GEOLOCATION_PATH = "lat=-23&lon=-46";
     public static final String LATITUDE_PATH = "lat=";
     public static final String LONGITUDE_PATH = "&lon=";
+    public static final String UNITS_PATH = "&units=";
 
     /***Convert Temperature Constants***/
     public static final int TEMP_CELSIUS = 0;
     public static final int TEMP_FAHRENHEIT = 1;
+
+    /***Temperature Constants***/
+    public static final String CELSIUS_TEMP = "metric";
+    public static final String FAHRENHEIT_TEMP = "imperial";
 
     /***Shared Preferences Type***/
     public static final int PREF_TYPE_TEMPERATURE = 0;
@@ -31,5 +36,12 @@ public class Constants {
     /***Dialog Constants Tag***/
     public static final String DIALOG_INTERNET_CONN_FAILURE = "internetConnectionFailure";
     public static final String DIALOG_SERVER_CONN_FAILURE = "serverConnectionFailure";
+    public static final String DIALOG_SERVER_ERROR = "dialogServerError";
+
+    /***Units***/
+    public static final String UNIT_TEMP_CELSIUS = " °C";
+    public static final String UNIT_TEMP_FAHRENHEIT = " °F";
+    public static final String UNIT_WIND_METRIC = " m/s";
+
 
 }

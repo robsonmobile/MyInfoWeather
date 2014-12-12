@@ -83,6 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
+        android:id="@+id/scrollViewWeather"
         >
 
             <LinearLayout
@@ -102,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="30dp"
-                        android:layout_weight="1"
+
                         android:layout_gravity="center_horizontal"
                         android:orientation="vertical">
 
@@ -113,20 +114,22 @@
                             android:visibility="gone"/>
 
                         <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
+                            android:layout_width="90dp"
+                            android:layout_height="90dp"
                             android:layout_gravity="center"
                             android:id="@+id/weatherIcon"
-                            android:src="@drawable/weather_rain_icon"/>
+                            android:src="@drawable/wc_shower_rain"/>
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:gravity="center"
                             android:text="@string/weather_title"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:layout_marginBottom="10dp"
-                            android:id="@+id/weatherTitle"/>
+                            android:id="@+id/weatherTitle"
+                            android:lines="4"/>
 
                         </LinearLayout>
 
@@ -134,7 +137,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:layout_weight="30"
+
                             android:layout_marginTop="30dp"
 
                             android:layout_gravity="left"
@@ -225,13 +228,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center|center_horizontal"
-                            android:layout_marginLeft="22dp"
+                            android:layout_marginLeft="18dp"
                             android:layout_marginTop="35dp"
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="25dp"
-                                android:layout_height="25dp"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
                                 android:src="@drawable/wind_icon"/>
 
                             <ProgressBar
@@ -246,7 +249,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="5dp"
                                 android:text="20 km/h"
-                                android:textSize="20sp"
+                                android:textSize="18sp"
                                 android:id="@+id/weatherWind"
                                 />
 
@@ -302,7 +305,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
+                    android:focusableInTouchMode="true"
                     android:id="@+id/searchLayout"
 
                     >
@@ -342,7 +346,14 @@
 
                 </LinearLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    />
+
             </LinearLayout>
+
+
     </ScrollView>
 
 </RelativeLayout>

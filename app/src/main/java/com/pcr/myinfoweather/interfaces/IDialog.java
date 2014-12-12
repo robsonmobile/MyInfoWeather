@@ -12,6 +12,6 @@ public interface IDialog {
     public String setMessage(DialogFragment dialog);
     public String setTitle(DialogFragment dialog);
     public CharSequence[] setItems(DialogFragment dialog);
-    public int onSelectedItem(int position);
+    public void onSelectedItem(int position);
 
 }

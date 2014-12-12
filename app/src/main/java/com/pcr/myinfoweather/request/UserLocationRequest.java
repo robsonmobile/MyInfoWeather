@@ -4,14 +4,11 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
-import com.pcr.myinfoweather.activities.MainActivity;
-import com.pcr.myinfoweather.dialogs.OptionsDialogBuilder;
 import com.pcr.myinfoweather.interfaces.ILocationListener;
 import com.pcr.myinfoweather.models.LocationData;
 
@@ -23,21 +20,26 @@ import java.util.Locale;
 /**
  * Created by Paula on 04/12/2014.
  */
-public class LocationRequest implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class UserLocationRequest implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
 
+    private static UserLocationRequest instance;
     private LocationClient mLocationClient;
-    private Context ctx;
+    private Context mContext;
     private Location mCurrentLocation;
-    private LocationRequest mInstance;
+    private UserLocationRequest mInstance;
     private ILocationListener mListener;
 
 
-    public LocationRequest() {
-
+    public static UserLocationRequest getInstance(Context context) {
+        if(instance == null) {
+            instance = new UserLocationRequest(context);
+        }
+        return instance;
     }
 
-    public LocationRequest(Context context) {
-        this.ctx = context;
+
+    private UserLocationRequest(Context ctx) {
+        this.mContext = ctx;
     }
 
     public void setListener(ILocationListener mListener) {
@@ -69,7 +71,7 @@ public class LocationRequest implements GooglePlayServicesClient.ConnectionCallb
 
             LocationData.getInstance().setLat(lat);
             LocationData.getInstance().setLon(lon);
-            Geocoder geocoder = new Geocoder(ctx, Locale.getDefault());
+            Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
 
             try {
                 List<Address> listLocation = geocoder.getFromLocation(lat, lon, 1);
@@ -94,10 +96,10 @@ public class LocationRequest implements GooglePlayServicesClient.ConnectionCallb
     }
 
     public void getCityLocation(String cityName) {
-        String state = null;
-        String city = null;
-        String country = null;
-        Geocoder geocoder = new Geocoder(ctx, Locale.getDefault());
+        String stateStr = null;
+        String cityStr = null;
+        String countryStr = null;
+        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
         try {
             List<Address> listLocation = geocoder.getFromLocationName(cityName, 10);
             ArrayList<String> listCity = new ArrayList<String>();
@@ -107,12 +109,12 @@ public class LocationRequest implements GooglePlayServicesClient.ConnectionCallb
                 if(listLocation.size() > 1) {
                     for(int i = 0; i < listLocation.size(); i++) {
                         address = listLocation.get(i);
-                        state = address.getAdminArea();
-                        city = address.getSubAdminArea();
-                        country = address.getCountryCode();
+                        stateStr = address.getAdminArea();
+                        cityStr = address.getSubAdminArea();
+                        countryStr = address.getCountryCode();
 
-                        String addressCity = city + " - " + state + " - " + country;
-                        if(state != null && city != null && country != null) {
+                        String addressCity = cityStr + " - " + stateStr + " - " + countryStr;
+                        if(stateStr != null && cityStr != null && countryStr != null) {
                             listCity.add(addressCity);
                             listCityPosition.add(listLocation.get(i));
                         }
@@ -124,18 +126,17 @@ public class LocationRequest implements GooglePlayServicesClient.ConnectionCallb
                     mListener.onCitiesToChoose(listCity, listCityPosition);
                 } else {
                     System.out.println("log listaddress: " + listLocation);
-                    city = null;
-                    state = null;
-                    country = null;
+                    cityStr = null;
+                    stateStr = null;
+                    countryStr = null;
                     address = listLocation.get(0);
-                    state = address.getAdminArea();
-                    city = address.getSubAdminArea();
-                    country = address.getCountryCode();
+                    stateStr = validateNullString(address.getAdminArea());
+                    cityStr = validateNullString(address.getSubAdminArea());
+                    countryStr = validateNullString(address.getCountryCode());
 
-                    LocationData.getInstance().setCity(city);
-                    LocationData.getInstance().setState(state);
-                    LocationData.getInstance().setCountry(country);
-                    //getWeatherData();
+                    LocationData.getInstance().setCity(cityStr);
+                    LocationData.getInstance().setState(stateStr);
+                    LocationData.getInstance().setCountry(countryStr);
                 }
             }
         } catch (IOException e) {
@@ -144,7 +145,7 @@ public class LocationRequest implements GooglePlayServicesClient.ConnectionCallb
     }
 
     public void connectClient() {
-        mLocationClient = new LocationClient(ctx, this, this);
+        mLocationClient = new LocationClient(mContext, this, this);
         mLocationClient.connect();
     }
 
@@ -156,4 +157,11 @@ public class LocationRequest implements GooglePlayServicesClient.ConnectionCallb
         return mLocationClient.isConnected();
     }
 
+    private String validateNullString(String input) {
+        if(input == null) {
+            return "";
+        } else {
+            return input;
+        }
+    }
 }

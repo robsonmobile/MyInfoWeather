@@ -1,9 +1,5 @@
 package com.pcr.myinfoweather.request;
 
-import android.widget.Toast;
-
-import com.pcr.myinfoweather.R;
-import com.pcr.myinfoweather.activities.MainActivity;
 import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.response.WeatherHttpResponseHandler;
 import com.pcr.myinfoweather.utils.Constants;
@@ -16,7 +12,7 @@ import java.net.URISyntaxException;
  */
 public class PerformRequestWeather {
 
-    private LocationRequest requestLocation = new LocationRequest();
+    //private UserLocationRequest requestLocation = new UserLocationRequest();
 
     private String createPath(int requestType, String cityField) {
         String path = null;

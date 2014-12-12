@@ -16,7 +16,7 @@ public class SharedPreferencesData {
     private SharedPreferences.Editor editor;
     private double tempPreference;
     private static SharedPreferencesData mInstance = null;
-    public static Context mContext;
+    public Context mContext;
 
     /***Preferences Temperature***/
     private static final String PREFS_TEMP = "PREFS_TEMP";
@@ -29,8 +29,16 @@ public class SharedPreferencesData {
     private static final String TYPE_TEMP_UNITY = "TYPE_TEMP_UNITY";
     private int unityTempType;
 
+    private static SharedPreferencesData instance;
 
-    public SharedPreferencesData(Context context) {
+    public static SharedPreferencesData getInstance(Context ctx) {
+        if(instance == null) {
+            instance = new SharedPreferencesData(ctx);
+        }
+        return instance;
+    }
+
+    private SharedPreferencesData(Context context) {
         this.mContext = context;
     }
 
@@ -53,6 +61,11 @@ public class SharedPreferencesData {
         editor = prefData.edit();
         editor.putInt(TYPE_TEMP_UNITY, unityType);
         editor.apply();
+    }
+
+    public String getTempPreferenceDataStr () {
+        prefData = mContext.getSharedPreferences(PREFS_TEMP, MODE_PRIVATE);
+        return prefData.getString(TYPE_TEMP_UNITY, Constants.CELSIUS_TEMP);
     }
 
 }
