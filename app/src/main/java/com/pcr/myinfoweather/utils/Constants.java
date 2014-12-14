@@ -43,5 +43,10 @@ public class Constants {
     public static final String UNIT_TEMP_FAHRENHEIT = " °F";
     public static final String UNIT_WIND_METRIC = " m/s";
 
+    /***Day/Night indicator***/
+    public static final int TIME_DAY = 0;
+    public static final int TIME_NIGHT = 1;
+
+
 
 }

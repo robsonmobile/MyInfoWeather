@@ -8,7 +8,10 @@ import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderApi;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.plus.Plus;
 import com.pcr.myinfoweather.interfaces.ILocationListener;
 import com.pcr.myinfoweather.models.LocationData;
 
@@ -20,14 +23,18 @@ import java.util.Locale;
 /**
  * Created by Paula on 04/12/2014.
  */
-public class UserLocationRequest implements GooglePlayServicesClient.ConnectionCallbacks, GooglePlayServicesClient.OnConnectionFailedListener {
+public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedListener,
+                                            GoogleApiClient.ConnectionCallbacks {
 
     private static UserLocationRequest instance;
-    private LocationClient mLocationClient;
+    //private LocationClient mLocationClient;
     private Context mContext;
     private Location mCurrentLocation;
     private UserLocationRequest mInstance;
     private ILocationListener mListener;
+    private GoogleApiClient mClient;
+    private FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
+
 
 
     public static UserLocationRequest getInstance(Context context) {
@@ -46,6 +53,14 @@ public class UserLocationRequest implements GooglePlayServicesClient.ConnectionC
         this.mListener = mListener;
     }
 
+    private void createGoogleApiClient() {
+        mClient = new GoogleApiClient.Builder(mContext)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+    }
+
     @Override
     public void onConnected(Bundle bundle) {
         getCurrentLocation();
@@ -54,9 +69,14 @@ public class UserLocationRequest implements GooglePlayServicesClient.ConnectionC
     }
 
     @Override
-    public void onDisconnected() {
+    public void onConnectionSuspended(int i) {
 
     }
+
+//    @Override
+//    public void onDisconnected() {
+//
+//    }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
@@ -64,8 +84,9 @@ public class UserLocationRequest implements GooglePlayServicesClient.ConnectionC
     }
 
     private void getCurrentLocation() {
-        if(mLocationClient.isConnected()) {
-            mCurrentLocation = mLocationClient.getLastLocation();
+        if(mClient.isConnected()) {
+            mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
+            //mCurrentLocation = mClient.getLastLocation();
             float lat = (float) mCurrentLocation.getLatitude();
             float lon = (float) mCurrentLocation.getLongitude();
 
@@ -145,16 +166,20 @@ public class UserLocationRequest implements GooglePlayServicesClient.ConnectionC
     }
 
     public void connectClient() {
-        mLocationClient = new LocationClient(mContext, this, this);
-        mLocationClient.connect();
+        createGoogleApiClient();
+        mClient.connect();
+        //mLocationClient = new LocationClient(mContext, this, this);
+        //mLocationClient.connect();
     }
 
     public void disconnectClient() {
-        mLocationClient.disconnect();
+        //mLocationClient.disconnect();
+        mClient.disconnect();
     }
 
     public boolean isConnected() {
-        return mLocationClient.isConnected();
+        return mClient.isConnected();
+                //mLocationClient.isConnected();
     }
 
     private String validateNullString(String input) {

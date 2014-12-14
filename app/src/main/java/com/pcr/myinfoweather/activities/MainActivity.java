@@ -3,7 +3,6 @@ package com.pcr.myinfoweather.activities;
 
 import android.content.Intent;
 import android.location.Address;
-import android.location.Location;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
@@ -22,8 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
-import com.google.android.gms.location.LocationClient;
-import com.google.android.gms.location.LocationRequest;
 import com.pcr.myinfoweather.R;
 import com.pcr.myinfoweather.dialogs.AlertDialogBuilder;
 import com.pcr.myinfoweather.dialogs.OptionsDialogBuilder;
@@ -42,7 +39,8 @@ import com.pcr.myinfoweather.utils.CurrentDateAndTime;
 import com.pcr.myinfoweather.utils.DigitSeparator;
 import com.pcr.myinfoweather.utils.GeneratePathRequest;
 import com.pcr.myinfoweather.utils.SharedPreferencesData;
-import com.pcr.myinfoweather.utils.TemperatureConverter;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,8 +101,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onResume();
         checkInternetConnection();
         requestType = Constants.PATH_FOR_GEOLOCATION;
-        System.out.println("log current time: " + CurrentDateAndTime.getInstance(this).getCurrentTime());
-        CurrentDateAndTime.getCurrentTimeStamp();
         startLoading();
 
         if(UserLocationRequest.getInstance(this).isConnected()) {
@@ -135,24 +131,29 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         float maxTemp = weatherData.getMain().getTempMax();
         float minTemp = weatherData.getMain().getTempMin();
 
+        String maxTempFormat = new DecimalFormat("##.#").format(maxTemp);
+        String minTempFormat = new DecimalFormat("##.#").format(minTemp);
+
         if(SharedPreferencesData.getInstance(this).getTempPreferenceDataStr().equalsIgnoreCase(Constants.CELSIUS_TEMP)) {
-            tempMax.setText(String.valueOf(maxTemp)  + Constants.UNIT_TEMP_CELSIUS);
-            tempMin.setText(String.valueOf(minTemp)  + Constants.UNIT_TEMP_CELSIUS);
+            tempMax.setText(String.valueOf(maxTempFormat)  + Constants.UNIT_TEMP_CELSIUS);
+            tempMin.setText(String.valueOf(minTempFormat)  + Constants.UNIT_TEMP_CELSIUS);
         } else {
-            tempMax.setText(String.valueOf(maxTemp)  + Constants.UNIT_TEMP_FAHRENHEIT);
-            tempMin.setText(String.valueOf(minTemp)  + Constants.UNIT_TEMP_FAHRENHEIT);
+            tempMax.setText(String.valueOf(maxTempFormat)  + Constants.UNIT_TEMP_FAHRENHEIT);
+            tempMin.setText(String.valueOf(minTempFormat)  + Constants.UNIT_TEMP_FAHRENHEIT);
         }
 
         String completeLocation = LocationData.getInstance().getCity() + ", " + LocationData.getInstance().getState() +
                       ", " + LocationData.getInstance().getCountry();
+        String windFormatted = new DecimalFormat("##.#").format(weatherData.getWind().getSpeed());
 
         weatherLocationCity.setText(completeLocation);
-        weatherWind.setText(String.valueOf(weatherData.getWind().getSpeed()) + Constants.UNIT_WIND_METRIC);
+        weatherWind.setText(String.valueOf(windFormatted + Constants.UNIT_WIND_METRIC));
         weatherCurrentDate.setText(CurrentDateAndTime.getInstance(this).getCurrentDate());
-
         weatherTitle.setText(weatherData.getWeather().get(0).getDescription());
+
         int idWeatherCondition = weatherData.getWeather().get(0).getId();
         int digit = DigitSeparator.getInstance(this).getDigit(idWeatherCondition, 1);
+
         switch (digit) {
             case 2:
                 weatherIcon.setImageResource(R.drawable.wc_thunderstorm);
@@ -184,10 +185,18 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 int lastDigit = DigitSeparator.getInstance(this).getDigit(idWeatherCondition, 3);
                 switch(lastDigit) {
                     case 0:
-                       weatherIcon.setImageResource(R.drawable.wc_clear_sky_day);
+                        if(CurrentDateAndTime.getInstance(this).isDayOrNight() == Constants.TIME_DAY) {
+                            weatherIcon.setImageResource(R.drawable.wc_clear_sky_day);
+                        } else {
+                            weatherIcon.setImageResource(R.drawable.wc_clear_sky_night);
+                        }
                         break;
                     case 1:
-                        weatherIcon.setImageResource(R.drawable.wc_few_clouds_day);
+                        if(CurrentDateAndTime.getInstance(this).isDayOrNight() == Constants.TIME_DAY) {
+                            weatherIcon.setImageResource(R.drawable.wc_few_clouds_day);
+                        } else {
+                            weatherIcon.setImageResource(R.drawable.wc_few_clouds_night);
+                        }
                         break;
                     case 2:
                         weatherIcon.setImageResource(R.drawable.wc_scattered_clouds);

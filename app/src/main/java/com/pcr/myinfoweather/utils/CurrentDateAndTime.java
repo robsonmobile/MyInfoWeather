@@ -4,9 +4,11 @@ import android.content.Context;
 import android.text.format.Time;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by Paula on 05/12/2014.
@@ -32,21 +34,26 @@ public class CurrentDateAndTime {
         return dateFormat.format(currentDate);
     }
 
-    public String getCurrentTime() {
-        int hours =  new Time(String.valueOf(System.currentTimeMillis())).hour;
-        System.out.println("log hour: " + hours);
+    public int isDayOrNight() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        Calendar calendar = new GregorianCalendar();
+        long currentTime = calendar.get(Calendar.MILLISECOND);
+        long timeInMilliDay = 0;
+        long timeInMilliNight = 0;
+        try {
+            Date mDateDay = simpleDateFormat.parse("06:00:00");
+            Date mDateNight = simpleDateFormat.parse("19:00:00");
+            timeInMilliDay = mDateDay.getTime();
+            timeInMilliNight = mDateNight.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        Date currentDate = Calendar.getInstance().getTime();
-        DateFormat dateFormat = android.text.format.DateFormat.getTimeFormat(context);
-        String formattedDate = dateFormat.format(currentDate);
-        return "";
-
+        if((currentTime >= timeInMilliDay) && (timeInMilliNight >= currentTime)) {
+            return Constants.TIME_DAY;
+        } else {
+            return Constants.TIME_NIGHT;
+        }
     }
 
-    public static String getCurrentTimeStamp(){
-            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-            String currentTimeStamp = dateFormat.format(new Date()); // Find todays date
-            System.out.println("log current time: " + currentTimeStamp);
-            return currentTimeStamp;
-    }
 }
