@@ -94,17 +94,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         UserLocationRequest.getInstance(this).setListener(MainActivity.this);
+        cityField.setText("");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         checkInternetConnection();
-        requestType = Constants.PATH_FOR_GEOLOCATION;
         startLoading();
 
+
         if(UserLocationRequest.getInstance(this).isConnected()) {
-            performRequest(requestType);
+            if(cityField.getText().toString().equalsIgnoreCase("")) {
+                performRequest(Constants.PATH_FOR_GEOLOCATION);
+            } else {
+                performRequest(Constants.PATH_FOR_CITY);
+            }
         }
     }
 
@@ -415,13 +420,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    public void onFinishedRequest(boolean isFinishedRequest) {
+    public void onFinishedLocationRequest(boolean isFinishedRequest) {
         if(isFinishedRequest) {
-            String city = LocationData.getInstance().getCity();
-            String state = LocationData.getInstance().getState();
-            String country = LocationData.getInstance().getCountry();
+            if(cityField.getText().toString().equalsIgnoreCase("")) {
+                performRequest(Constants.PATH_FOR_GEOLOCATION);
+            } else {
+                performRequest(Constants.PATH_FOR_CITY);
+            }
 
-            performRequest(requestType);
         }
     }
 
@@ -434,7 +440,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    public void status(CheckInternetConnection.EnumStates status) {
+    public void onStatusResult(CheckInternetConnection.EnumStates status) {
         System.out.println("log status: " + status);
     }
 

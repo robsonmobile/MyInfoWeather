@@ -7,14 +7,11 @@ import android.location.Location;
 import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.plus.Plus;
 import com.pcr.myinfoweather.interfaces.ILocationListener;
 import com.pcr.myinfoweather.models.LocationData;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +61,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
     @Override
     public void onConnected(Bundle bundle) {
         getCurrentLocation();
-        mListener.onFinishedRequest(true);
+        mListener.onFinishedLocationRequest(true);
 
     }
 

@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface ILocationListener {
 
-    public void onFinishedRequest(boolean isFinishedRequest);
+    public void onFinishedLocationRequest(boolean isFinishedRequest);
 
     public void onCitiesToChoose(ArrayList<String> cities, List<Address> selectedCity);
 }

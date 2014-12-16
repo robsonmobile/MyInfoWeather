@@ -7,5 +7,5 @@ import com.pcr.myinfoweather.utils.CheckInternetConnection;
  */
 public interface INetworkConnection {
 
-    public void status (CheckInternetConnection.EnumStates status);
+    public void onStatusResult (CheckInternetConnection.EnumStates status);
 }

@@ -35,10 +35,10 @@ public class CheckInternetConnection {
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
         if(networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            callbackConnection.status(EnumStates.CONNECTED);
+            callbackConnection.onStatusResult(EnumStates.CONNECTED);
             return true;
         } else {
-            callbackConnection.status(EnumStates.DISCONNECTED);
+            callbackConnection.onStatusResult(EnumStates.DISCONNECTED);
             return false;
         }
     }
