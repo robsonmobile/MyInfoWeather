@@ -35,21 +35,29 @@ public class CurrentDateAndTime {
     }
 
     public int isDayOrNight() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        Calendar calendar = new GregorianCalendar();
-        long currentTime = calendar.get(Calendar.MILLISECOND);
-        long timeInMilliDay = 0;
-        long timeInMilliNight = 0;
-        try {
-            Date mDateDay = simpleDateFormat.parse("06:00:00");
-            Date mDateNight = simpleDateFormat.parse("19:00:00");
-            timeInMilliDay = mDateDay.getTime();
-            timeInMilliNight = mDateNight.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        //get Instances
+        Calendar currentCalendar = Calendar.getInstance();
+        long currentDateTime = currentCalendar.getTimeInMillis();
 
-        if((currentTime >= timeInMilliDay) && (timeInMilliNight >= currentTime)) {
+        //creating instances for day, month and year
+        int day = currentCalendar.get(Calendar.DAY_OF_MONTH);
+        int month = currentCalendar.get(Calendar.MONTH);
+        int year = currentCalendar.get(Calendar.YEAR);
+
+        //creating instance for day and night specif time
+        Calendar dayCalendar = Calendar.getInstance();
+        Calendar nightCalendar = Calendar.getInstance();
+
+        //set specific time
+        dayCalendar.set(year, month, day, 06, 00, 00);
+        nightCalendar.set(year, month, day, 19, 30, 00);
+
+        //getting datetime in millis to calculate
+        long dayDate = dayCalendar.getTimeInMillis();
+        long nightDate = nightCalendar.getTimeInMillis();
+
+        //set
+        if(currentDateTime >= dayDate && nightDate >= currentDateTime) {
             return Constants.TIME_DAY;
         } else {
             return Constants.TIME_NIGHT;
