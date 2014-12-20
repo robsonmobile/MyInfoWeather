@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="titulo da categoria"
+        android:key="pref_key_category">
+
+        <Preference
+            android:key="pref"
+            android:title="pref"
+            android:summary="pref"
+            >
+
+
+
+        </Preference>
+
+        <CheckBoxPreference
+            android:key="temp_celsius"
+            android:title="Celsius"
+            android:summary="Set temperature for Celsius"
+            android:defaultValue="true"
+            />
+
+        <CheckBoxPreference
+            android:key="temp_fahrenheit"
+            android:title="Fahrenheit"
+            android:summary="Set temperature for fahrenheit"
+            android:defaultValue="false"
+            />
+
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

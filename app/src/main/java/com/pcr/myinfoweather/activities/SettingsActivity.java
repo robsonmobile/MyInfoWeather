@@ -1,6 +1,7 @@
 package com.pcr.myinfoweather.activities;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 
 import com.pcr.myinfoweather.R;
@@ -13,6 +14,12 @@ public class SettingsActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings);
+
+        //adding the preference fragment
+        getFragmentManager().beginTransaction()
+                .add(android.R.id.content, new SettingsFragment())
+                .commit();
+
+        PreferenceManager.setDefaultValues(this, R.xml.settings_layout, false);
     }
 }
