@@ -26,13 +26,14 @@ public class SettingsActivity extends ActionBarActivity implements IDialog, Pref
     public static final String KEY_PREFS_TEMPERATURE = "temp_celcius";
     private Preference temperaturePref;
     private Preference updateIntervalPref;
-    private SettingsFragment mFragment= new SettingsFragment();
+    private SettingsFragment mFragment;
     private AlertDialogBuilder alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //adding the preference fragment
+        mFragment = new SettingsFragment();
         getFragmentManager().beginTransaction()
                 .add(android.R.id.content, mFragment)
                 .commit();
@@ -62,6 +63,7 @@ public class SettingsActivity extends ActionBarActivity implements IDialog, Pref
 
         String updateInterval = convertUpdateInterval(prefUpdateInterval);
         System.out.println("log interval: " + updateInterval);
+        updateIntervalPref.setSummary(updateInterval);
 
     }
 
@@ -91,18 +93,10 @@ public class SettingsActivity extends ActionBarActivity implements IDialog, Pref
 
     }
 
-
-
     @Override
-    public void onPositiveClick(DialogFragment dialog) {
-
-    }
-
+    public void onPositiveClick(DialogFragment dialog) {}
     @Override
-    public void onNegativeClick(DialogFragment dialog) {
-
-    }
-
+    public void onNegativeClick(DialogFragment dialog) {}
     @Override
     public String setMessage(DialogFragment dialog) {
         return "";
@@ -144,12 +138,12 @@ public class SettingsActivity extends ActionBarActivity implements IDialog, Pref
         if(dialog.getTag().equals("dialogTemperaturePref")) {
             switch (position) {
                 case 0:
-                    temperaturePref.setSummary("Temperature unit Celsius");
+                    temperaturePref.setSummary("Celsius");
                     SharedPreferencesData.getInstance(SettingsActivity.this)
                             .setTempPreferenceDataStr(Constants.CELSIUS_TEMP);
                     break;
                 case 1:
-                    temperaturePref.setSummary("Temperature unit Fahrenheit");
+                    temperaturePref.setSummary("Fahrenheit");
                     SharedPreferencesData.getInstance(SettingsActivity.this)
                             .setTempPreferenceDataStr(Constants.FAHRENHEIT_TEMP);
                     break;

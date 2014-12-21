@@ -24,7 +24,7 @@
     <string name="temperature_unit">Temperature Unit</string>
     <string name="set_update_interval">Set Update interval</string>
     <string name="typeUpdateIntervalHint">Type update interval</string>
-    <string name="update_interval">Update invertal</string>
+    <string name="update_interval">Update interval</string>
     <string name="message_close">Close</string>
 
 </resources>
