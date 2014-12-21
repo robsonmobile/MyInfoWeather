@@ -6,14 +6,16 @@
         android:key="pref_key_category">
 
         <Preference
-            android:key="pref"
-            android:title="pref"
+            android:key="temperaturePref"
+            android:title="@string/temperature_unit"
             android:summary="pref"
-            >
+            />
 
-
-
-        </Preference>
+        <Preference
+            android:key="updateInterval"
+            android:title="@string/update_interval"
+            android:summary=""
+            />
 
         <CheckBoxPreference
             android:key="temp_celsius"
