@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.pcr.myinfoweather.R;
 import com.pcr.myinfoweather.dialogs.AlertDialogBuilder;
-import com.pcr.myinfoweather.dialogs.OptionsDialogBuilder;
 import com.pcr.myinfoweather.interfaces.IDialog;
 import com.pcr.myinfoweather.interfaces.ILocationListener;
 import com.pcr.myinfoweather.interfaces.INetworkConnection;
@@ -63,7 +62,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private Button btnSearch;
     private ImageView weatherIcon;
     private AlertDialogBuilder dialogAlert;
-    private OptionsDialogBuilder dialogOptions;
+    private AlertDialogBuilder dialogOptions;
     private int requestType;
     private List<String> listCity;
     private List<Address> listCityPosition;
@@ -88,8 +87,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         }
 
-        dialogAlert = new AlertDialogBuilder();
-        dialogOptions = new OptionsDialogBuilder();
+
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
@@ -102,6 +100,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onResume();
         checkInternetConnection();
         startLoading();
+
+        dialogAlert = AlertDialogBuilder.newInstance(Constants.DIALOG_TYPE_ALERT);
+        dialogOptions = AlertDialogBuilder.newInstance(Constants.DIALOG_TYPE_OPTIONS);
 
 
         if(UserLocationRequest.getInstance(this).isConnected()) {
@@ -276,6 +277,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void onFailure(Throwable e, String errorMessage) {
                 dialogAlert.show(getSupportFragmentManager(), Constants.DIALOG_SERVER_CONN_FAILURE);
+
             }
 
             @Override
@@ -383,8 +385,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             return "Error";
         }
         else {
-            return "teste2";
+            return "";
+
         }
+    }
+
+    @Override
+    public int setIcon(DialogFragment dialog) {
+        return 0;
     }
 
     @Override
@@ -399,13 +407,23 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     @Override
-    public void onSelectedItem(int position) {
+    public void onSelectedItem(DialogFragment dialog, int position) {
         Address address1 = listCityPosition.get(position);
 
         LocationData.getInstance().setCity(address1.getSubAdminArea());
         LocationData.getInstance().setState(address1.getAdminArea());
         LocationData.getInstance().setCountry(address1.getCountryCode());
         getWeatherData();
+    }
+
+    @Override
+    public int singleChoiceSelectedPosition() {
+        return 0;
+    }
+
+    @Override
+    public CharSequence[] setSingleChoice(DialogFragment dialog) {
+        return new CharSequence[0];
     }
 
     @Override

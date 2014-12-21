@@ -20,6 +20,7 @@ public class SharedPreferencesData {
 
     /***Preferences Temperature***/
     private static final String PREFS_TEMP = "PREFS_TEMP";
+    private static final String PREFS_UPDATE = "PREFS_UPDATE";
     private static final int MODE_PRIVATE = Context.MODE_PRIVATE;
     private String prefName;
 
@@ -66,6 +67,18 @@ public class SharedPreferencesData {
     public String getTempPreferenceDataStr () {
         prefData = mContext.getSharedPreferences(PREFS_TEMP, MODE_PRIVATE);
         return prefData.getString(TYPE_TEMP_UNITY, Constants.CELSIUS_TEMP);
+    }
+
+    public void setTempPreferenceDataStr (String selectedPref) {
+        prefData = mContext.getSharedPreferences(PREFS_TEMP, MODE_PRIVATE);
+        editor = prefData.edit();
+        editor.putString(TYPE_TEMP_UNITY, selectedPref);
+        editor.apply();
+    }
+
+    public long getPreferenceUpdateInterval() {
+        prefData = mContext.getSharedPreferences(PREFS_UPDATE, MODE_PRIVATE);
+        return prefData.getLong(TYPE_TEMP_UNITY, Constants.PREF_DEFAULT_UPDATE_INTERVAL);
     }
 
 }

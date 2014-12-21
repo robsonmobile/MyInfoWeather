@@ -21,5 +21,10 @@
     <string name="message_cancel">Cancel</string>
     <string name="title_connection_failure_dialog">Alert</string>
     <string name="toast_invalid_city_name">Invalid city name, please try again</string>
+    <string name="temperature_unit">Temperature Unit</string>
+    <string name="set_update_interval">Set Update interval</string>
+    <string name="typeUpdateIntervalHint">Type update interval</string>
+    <string name="update_interval">Update invertal</string>
+    <string name="message_close">Close</string>
 
 </resources>
