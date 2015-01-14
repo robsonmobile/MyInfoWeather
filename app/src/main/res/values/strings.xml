@@ -26,5 +26,6 @@
     <string name="typeUpdateIntervalHint">Type update interval</string>
     <string name="update_interval">Update interval</string>
     <string name="message_close">Close</string>
+    <string name="analog_name">analog</string>
 
 </resources>
