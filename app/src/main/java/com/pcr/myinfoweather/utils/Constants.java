@@ -16,6 +16,7 @@ public class Constants {
     public static final String GEOLOCATION_PATH = "lat=-23&lon=-46";
     public static final String LATITUDE_PATH = "lat=";
     public static final String LONGITUDE_PATH = "&lon=";
+    public static final String AND = "&";
     public static final String UNITS_PATH = "&units=";
 
     /***Convert Temperature Constants***/

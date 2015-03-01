@@ -25,7 +25,7 @@ public class OptionsDialogBuilder extends DialogFragment{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 System.out.println("log which: " + which);
-                mListener.onSelectedItem(which);
+                //mListener.onSelectedItem(which);
             }
         });
 

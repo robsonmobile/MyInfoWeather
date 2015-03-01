@@ -20,7 +20,7 @@ public class APIClient {
         if(REST_ADAPTER == null) {
             REST_ADAPTER = new RestAdapter.Builder()
 
-                    .setEndpoint(BuildConfig.BASE_URL + "RESTANTE DA URL")
+                    .setEndpoint(BuildConfig.BASE_URL + "/data/2.5")
 
                     .setLogLevel((BuildConfig.DEBUG) ?
                             RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
@@ -41,7 +41,9 @@ public class APIClient {
 
     public interface getWeatherbyLocationInterface {
         @GET("/weather") void createWith(
-                @Query("q") String cityName, Callback<String> callback
+                @Query("q") String cityName,
+                @Query("units") String units,
+                Callback<String> callback
         );
 
     }

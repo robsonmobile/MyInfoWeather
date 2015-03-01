@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.transition.Explode;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.pcr.myinfoweather.R;
 import com.pcr.myinfoweather.dialogs.AlertDialogBuilder;
@@ -28,6 +31,9 @@ import com.pcr.myinfoweather.interfaces.ILocationListener;
 import com.pcr.myinfoweather.interfaces.INetworkConnection;
 import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.models.WeatherData;
+import com.pcr.myinfoweather.models.weather.Weather;
+import com.pcr.myinfoweather.network.APIClient;
+import com.pcr.myinfoweather.network.JsonParsers;
 import com.pcr.myinfoweather.request.AppHttpClient;
 import com.pcr.myinfoweather.request.UserLocationRequest;
 import com.pcr.myinfoweather.response.WeatherHttpResponseHandler;
@@ -38,14 +44,23 @@ import com.pcr.myinfoweather.utils.CurrentDateAndTime;
 import com.pcr.myinfoweather.utils.DigitSeparator;
 import com.pcr.myinfoweather.utils.GeneratePathRequest;
 import com.pcr.myinfoweather.utils.SharedPreferencesData;
+import com.pcr.myinfoweather.utils.Validators;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, IDialog, ILocationListener, INetworkConnection {
 
     private WeatherData weatherData;
+    private Callback<String> callback;
 
     /******Ui Components******/
     private TextView tempMax;
@@ -83,9 +98,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         cityField.clearFocus();
         btnSearch.requestFocus();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-        }
+//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+//        }
 
 
 
@@ -109,6 +124,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             if(cityField.getText().toString().equalsIgnoreCase("")) {
                 performRequest(Constants.PATH_FOR_GEOLOCATION);
             } else {
+                new APIClient().getWeatherByLocation().createWith(Validators.validateTypedCity(cityField.getText().toString(), this),
+                        "metric", callback);
                 performRequest(Constants.PATH_FOR_CITY);
             }
         }
@@ -131,6 +148,42 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         fabButton = (FloatingActionsMenu) findViewById(R.id.fab);
         searchLayout = (LinearLayout) findViewById(R.id.searchLayout);
         scrollViewWeather = (ScrollView) findViewById(R.id.scrollViewWeather);
+    }
+
+
+    private void configureCityCallback() {
+
+        callback = new Callback<String>() {
+            @Override
+            public void success(String s, Response response) {
+                try {
+                    Weather weather = JsonParsers.parseWeather(new JSONObject(s));
+                    setWeatherData(weather);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    //implementar:
+                    notifyValidationError("Não foi possível conectar com o servidor");
+                    //fazer placeholder
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                //notifyValidationError("Não foi possível conectar com o servidor");
+                notifyValidationError(error.getMessage());
+
+            }
+        };
+    }
+
+    private void setWeatherData(Weather weather) {
+        float temp = weather.getTemp();
+        Log.d("temp", "weathertemp: "+ temp);
+    }
+
+    private void notifyValidationError(String errorMessage) {
+        //loadingContainer.setVisibility(View.INVISIBLE);
+        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
     }
 
     private void getWeatherData() {
@@ -222,6 +275,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onStart() {
         super.onStart();
         UserLocationRequest.getInstance(this).connectClient();
+        configureCityCallback();
     }
 
     @Override
@@ -234,12 +288,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v.getId() == R.id.btnSearchCity){
             //performRequest(Constants.PATH_FOR_GEOLOCATION);
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                getWindow().setExitTransition(new Explode());
-            }
+//            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                getWindow().setExitTransition(new Explode());
+//            }
             startLoading();
             requestType = Constants.PATH_FOR_CITY;
             performRequest(requestType);
+            new APIClient().getWeatherByLocation().createWith(Validators.validateTypedCity(cityField.getText().toString(), this),
+                    "metric", callback);
         } else if(v.getId() == R.id.cityField) {
             cityField.requestFocus();
             scrollViewWeather.post(new Runnable() {

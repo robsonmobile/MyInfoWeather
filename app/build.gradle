@@ -15,14 +15,14 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "BASE_URL", "\"https://http://api.openweathermap.org/data/2.5\""
+            buildConfigField "String", "BASE_URL", "\"http://api.openweathermap.org\""
 
         }
 
         debug {
             applicationIdSuffix ".debug"
             versionNameSuffix "-debug"
-            buildConfigField "String", "BASE_URL", "\"https://http://api.openweathermap.org/data/2.5\""
+            buildConfigField "String", "BASE_URL", "\"http://api.openweathermap.org\""
         }
     }
 }
@@ -39,5 +39,8 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.1.0'
     compile 'com.google.android.support:wearable:1.1.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
+    compile 'se.emilsjolander:sprinkles:1.2.4'
 
 }
