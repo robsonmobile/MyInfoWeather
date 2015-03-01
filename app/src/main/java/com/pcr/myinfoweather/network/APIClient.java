@@ -39,6 +39,10 @@ public class APIClient {
         return REST_ADAPTER.create(getWeatherbyLocationInterface.class);
     }
 
+    public getWeatherByGPSInterface getWeatherByGPS() {
+        return REST_ADAPTER.create(getWeatherByGPSInterface.class);
+    }
+
     public interface getWeatherbyLocationInterface {
         @GET("/weather") void createWith(
                 @Query("q") String cityName,
@@ -46,6 +50,15 @@ public class APIClient {
                 Callback<String> callback
         );
 
+    }
+
+    public interface getWeatherByGPSInterface {
+        @GET("/weather") void createWith(
+                @Query("lat") float latitude,
+                @Query("lon") float longitude,
+                @Query("units") String units,
+                Callback<String> callback
+        );
     }
 
 

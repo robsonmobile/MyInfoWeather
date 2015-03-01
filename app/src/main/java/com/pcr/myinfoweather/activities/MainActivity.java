@@ -3,17 +3,14 @@ package com.pcr.myinfoweather.activities;
 
 import android.content.Intent;
 import android.location.Address;
-import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.transition.Explode;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -60,7 +57,8 @@ import retrofit.client.Response;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, IDialog, ILocationListener, INetworkConnection {
 
     private WeatherData weatherData;
-    private Callback<String> callback;
+    private Callback<String> callbackCity;
+    private Callback<String> callbackGeolocation;
 
     /******Ui Components******/
     private TextView tempMax;
@@ -98,12 +96,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         cityField.clearFocus();
         btnSearch.requestFocus();
 
-//        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-//        }
-
-
-
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
         UserLocationRequest.getInstance(this).setListener(MainActivity.this);
@@ -122,11 +114,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if(UserLocationRequest.getInstance(this).isConnected()) {
             if(cityField.getText().toString().equalsIgnoreCase("")) {
-                performRequest(Constants.PATH_FOR_GEOLOCATION);
+                //performRequest(Constants.PATH_FOR_GEOLOCATION);
+                new APIClient().getWeatherByGPS().createWith(LocationData.getInstance().getLat(),
+                        LocationData.getInstance().getLon(), "metric", callbackGeolocation);
+
             } else {
                 new APIClient().getWeatherByLocation().createWith(Validators.validateTypedCity(cityField.getText().toString(), this),
-                        "metric", callback);
-                performRequest(Constants.PATH_FOR_CITY);
+                        "metric", callbackCity);
+                //performRequest(Constants.PATH_FOR_CITY);
             }
         }
     }
@@ -153,7 +148,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private void configureCityCallback() {
 
-        callback = new Callback<String>() {
+        callbackCity = new Callback<String>() {
             @Override
             public void success(String s, Response response) {
                 try {
@@ -172,6 +167,27 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 //notifyValidationError("Não foi possível conectar com o servidor");
                 notifyValidationError(error.getMessage());
 
+            }
+        };
+    }
+
+    private void configureGeoLocationCallback() {
+        callbackGeolocation = new Callback<String>() {
+            @Override
+            public void success(String s, Response response) {
+                try {
+                    Weather weather = JsonParsers.parseWeather(new JSONObject(s));
+                    setWeatherData(weather);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    notifyValidationError("Não foi possível conectar com o servidor");
+                }
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                notifyValidationError(error.getMessage());
             }
         };
     }
@@ -276,6 +292,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onStart();
         UserLocationRequest.getInstance(this).connectClient();
         configureCityCallback();
+        configureGeoLocationCallback();
     }
 
     @Override
@@ -295,7 +312,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             requestType = Constants.PATH_FOR_CITY;
             performRequest(requestType);
             new APIClient().getWeatherByLocation().createWith(Validators.validateTypedCity(cityField.getText().toString(), this),
-                    "metric", callback);
+                    "metric", callbackCity);
         } else if(v.getId() == R.id.cityField) {
             cityField.requestFocus();
             scrollViewWeather.post(new Runnable() {
@@ -497,7 +514,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onFinishedLocationRequest(boolean isFinishedRequest) {
         if(isFinishedRequest) {
             if(cityField.getText().toString().equalsIgnoreCase("")) {
-                performRequest(Constants.PATH_FOR_GEOLOCATION);
+                //performRequest(Constants.PATH_FOR_GEOLOCATION);
+                float latitude = LocationData.getInstance().getLat();
+                System.out.println("latitude: " + latitude);
+                new APIClient().getWeatherByGPS().createWith(LocationData.getInstance().getLat(),
+                        LocationData.getInstance().getLon(), "metric", callbackGeolocation);
             } else {
                 performRequest(Constants.PATH_FOR_CITY);
             }
