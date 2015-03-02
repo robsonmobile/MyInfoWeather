@@ -177,6 +177,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             public void success(String s, Response response) {
                 try {
                     Weather weather = JsonParsers.parseWeather(new JSONObject(s));
+                    System.out.println("log response geo: " + s);
                     setWeatherData(weather);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -193,6 +194,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     }
 
     private void setWeatherData(Weather weather) {
+        //pegar os valores que foram setados através do builder da classe, e colocar em cada item,
+        //primeiramente sem distinção de temperatura (F e C), colocar somente em celcius.
+
         float temp = weather.getTemp();
         Log.d("temp", "weathertemp: "+ temp);
     }
