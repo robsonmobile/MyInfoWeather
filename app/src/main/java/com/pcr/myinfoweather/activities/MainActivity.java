@@ -54,7 +54,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener, IDialog, ILocationListener, INetworkConnection {
+public class MainActivity extends ActionBarActivity implements View.OnClickListener, IDialog, UserLocationRequest.IListenerLocation, INetworkConnection {
 
     private WeatherData weatherData;
     private Callback<String> callbackCity;
@@ -98,7 +98,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.my_awesome_toolbar);
         setSupportActionBar(toolbar);
-        UserLocationRequest.getInstance(this).setListener(MainActivity.this);
+        UserLocationRequest.getInstance(this).setListener(this);
         cityField.setText("");
     }
 
@@ -514,6 +514,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
+
+
     @Override
     public void onFinishedLocationRequest(boolean isFinishedRequest) {
         if(isFinishedRequest) {
@@ -530,13 +532,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         }
     }
 
-    @Override
-    public void onCitiesToChoose(ArrayList<String> cities, List<Address> selectedCity) {
-        System.out.println("log cities to choose");
-        listCity = cities;
-        listCityPosition = selectedCity;
-        dialogOptions.show(getSupportFragmentManager(), "cityOptionsDialog");
-    }
+
+//    @Override
+//    public void onCitiesToChoose(ArrayList<String> cities, List<Address> selectedCity) {
+//        System.out.println("log cities to choose");
+//        listCity = cities;
+//        listCityPosition = selectedCity;
+//        dialogOptions.show(getSupportFragmentManager(), "cityOptionsDialog");
+//    }
 
     @Override
     public void onStatusResult(CheckInternetConnection.EnumStates status) {

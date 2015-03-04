@@ -28,7 +28,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
     private Context mContext;
     private Location mCurrentLocation;
     private UserLocationRequest mInstance;
-    private ILocationListener mListener;
+    private IListenerLocation mListener;
     private GoogleApiClient mClient;
     private FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
 
@@ -46,7 +46,11 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
         this.mContext = ctx;
     }
 
-    public void setListener(ILocationListener mListener) {
+    public interface IListenerLocation {
+        public void onFinishedLocationRequest(boolean isFinishedRequest);
+    }
+
+    public void setListener(IListenerLocation mListener) {
         this.mListener = mListener;
     }
 
@@ -83,7 +87,6 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
     private void getCurrentLocation() {
         if(mClient.isConnected()) {
             mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
-            //mCurrentLocation = mClient.getLastLocation();
             float lat = (float) mCurrentLocation.getLatitude();
             float lon = (float) mCurrentLocation.getLongitude();
 
@@ -141,7 +144,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
                     }
                    // OptionsDialogBuilder dialogOptions = new OptionsDialogBuilder();
                    // dialogOptions.show(getSupportFragmentManager(), "cityOptionsDialog");
-                    mListener.onCitiesToChoose(listCity, listCityPosition);
+                    //mListener.onCitiesToChoose(listCity, listCityPosition);
                 } else {
                     System.out.println("log listaddress: " + listLocation);
                     cityStr = null;
