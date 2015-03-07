@@ -106,7 +106,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         checkInternetConnection();
-        startLoading();
+        //startLoading();
 
         dialogAlert = AlertDialogBuilder.newInstance(Constants.DIALOG_TYPE_ALERT);
         dialogOptions = AlertDialogBuilder.newInstance(Constants.DIALOG_TYPE_OPTIONS);
@@ -114,14 +114,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         if(UserLocationRequest.getInstance(this).isConnected()) {
             if(cityField.getText().toString().equalsIgnoreCase("")) {
-                //performRequest(Constants.PATH_FOR_GEOLOCATION);
+                performRequest(Constants.PATH_FOR_GEOLOCATION);
                 new APIClient().getWeatherByGPS().createWith(LocationData.getInstance().getLat(),
                         LocationData.getInstance().getLon(), "metric", callbackGeolocation);
 
             } else {
                 new APIClient().getWeatherByLocation().createWith(Validators.validateTypedCity(cityField.getText().toString(), this),
                         "metric", callbackCity);
-                //performRequest(Constants.PATH_FOR_CITY);
+                performRequest(Constants.PATH_FOR_CITY);
             }
         }
     }
@@ -514,7 +514,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     public void onFinishedLocationRequest(boolean isFinishedRequest) {
         if(isFinishedRequest) {
             if(cityField.getText().toString().equalsIgnoreCase("")) {
-                //performRequest(Constants.PATH_FOR_GEOLOCATION);
+                performRequest(Constants.PATH_FOR_GEOLOCATION);
                 float latitude = LocationData.getInstance().getLat();
                 System.out.println("latitude: " + latitude);
                 new APIClient().getWeatherByGPS().createWith(LocationData.getInstance().getLat(),

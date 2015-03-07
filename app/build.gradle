@@ -42,5 +42,6 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp-urlconnection:2.0.0'
     compile 'com.squareup.okhttp:okhttp:2.0.0'
     compile 'se.emilsjolander:sprinkles:1.2.4'
+    compile 'com.path:android-priority-jobqueue:1.1.2'
 
 }
