@@ -24,7 +24,6 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
                                             GoogleApiClient.ConnectionCallbacks {
 
     private static UserLocationRequest instance;
-    //private LocationClient mLocationClient;
     private Context mContext;
     private Location mCurrentLocation;
     private UserLocationRequest mInstance;
@@ -64,7 +63,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
 
     @Override
     public void onConnected(Bundle bundle) {
-        getCurrentLocation();
+        getLocationData();
         mListener.onFinishedLocationRequest(true);
 
     }
@@ -89,7 +88,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
             mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
             float lat = (float) mCurrentLocation.getLatitude();
             float lon = (float) mCurrentLocation.getLongitude();
-
+            System.out.println("log passou aqui");
             LocationData.getInstance().setLat(lat);
             LocationData.getInstance().setLon(lon);
             Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
@@ -113,6 +112,17 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    private void getLocationData() {
+        if(mClient.isConnected()) {
+            mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
+            float lat = (float) mCurrentLocation.getLatitude();
+            float lon = (float) mCurrentLocation.getLongitude();
+            System.out.println("log passou aqui");
+            LocationData.getInstance().setLat(lat);
+            LocationData.getInstance().setLon(lon);
         }
     }
 
@@ -168,12 +178,9 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
     public void connectClient() {
         createGoogleApiClient();
         mClient.connect();
-        //mLocationClient = new LocationClient(mContext, this, this);
-        //mLocationClient.connect();
     }
 
     public void disconnectClient() {
-        //mLocationClient.disconnect();
         mClient.disconnect();
     }
 

@@ -9,7 +9,7 @@ import se.emilsjolander.sprinkles.annotations.Table;
  * Created by Paula on 23/02/2015.
  */
 @Table("weather")
-public class Weather extends Model {
+public class Weatherx extends Model {
 
     @AutoIncrementPrimaryKey
     @Column("id") long id;
@@ -18,11 +18,11 @@ public class Weather extends Model {
     @Column("temp_max") private float temp_max;
     @Column("speed") private float speed;
 
-    public Weather() {
+    public Weatherx() {
 
     }
 
-    private Weather(Builder builder) {
+    private Weatherx(Builder builder) {
         temp_min = builder.temp_min;
         temp = builder.temp;
         temp_max = builder.temp_max;
@@ -95,8 +95,8 @@ public class Weather extends Model {
             return this;
         }
 
-        public Weather build() {
-            return new Weather(this);
+        public Weatherx build() {
+            return new Weatherx(this);
         }
 
 

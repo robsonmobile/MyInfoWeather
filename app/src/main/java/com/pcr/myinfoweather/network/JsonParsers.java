@@ -1,6 +1,6 @@
 package com.pcr.myinfoweather.network;
 
-import com.pcr.myinfoweather.models.weather.Weather;
+import com.pcr.myinfoweather.models.weather.Weatherx;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,9 +10,9 @@ import org.json.JSONObject;
  */
 public class JsonParsers {
 
-    public static Weather parseWeather(JSONObject weatherJson) throws JSONException {
+    public static Weatherx parseWeather(JSONObject weatherJson) throws JSONException {
         if(weatherJson != null) {
-            return Weather.newBuilder()
+            return Weatherx.newBuilder()
                     .withTempMax((float) weatherJson.getJSONObject("main").getDouble("temp_max"))
                     .withTemp((float) weatherJson.getJSONObject("main").getDouble("temp"))
                     .withTempMin((float) weatherJson.getJSONObject("main").getDouble("temp_min"))
@@ -22,5 +22,7 @@ public class JsonParsers {
 
         return null;
     }
+
+
 
 }

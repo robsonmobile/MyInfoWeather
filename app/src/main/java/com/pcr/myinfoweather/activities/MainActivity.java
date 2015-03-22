@@ -24,11 +24,10 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.pcr.myinfoweather.R;
 import com.pcr.myinfoweather.dialogs.AlertDialogBuilder;
 import com.pcr.myinfoweather.interfaces.IDialog;
-import com.pcr.myinfoweather.interfaces.ILocationListener;
 import com.pcr.myinfoweather.interfaces.INetworkConnection;
 import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.models.WeatherData;
-import com.pcr.myinfoweather.models.weather.Weather;
+import com.pcr.myinfoweather.models.weather.Weatherx;
 import com.pcr.myinfoweather.network.APIClient;
 import com.pcr.myinfoweather.network.JsonParsers;
 import com.pcr.myinfoweather.request.AppHttpClient;
@@ -47,7 +46,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit.Callback;
@@ -152,7 +150,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void success(String s, Response response) {
                 try {
-                    Weather weather = JsonParsers.parseWeather(new JSONObject(s));
+                    Weatherx weather = JsonParsers.parseWeather(new JSONObject(s));
                     setWeatherData(weather);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -176,7 +174,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             @Override
             public void success(String s, Response response) {
                 try {
-                    Weather weather = JsonParsers.parseWeather(new JSONObject(s));
+                    Weatherx weather = JsonParsers.parseWeather(new JSONObject(s));
                     System.out.println("log response geo: " + s);
                     setWeatherData(weather);
                 } catch (JSONException e) {
@@ -193,7 +191,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         };
     }
 
-    private void setWeatherData(Weather weather) {
+    private void setWeatherData(Weatherx weather) {
         //pegar os valores que foram setados através do builder da classe, e colocar em cada item,
         //primeiramente sem distinção de temperatura (F e C), colocar somente em celcius.
 
