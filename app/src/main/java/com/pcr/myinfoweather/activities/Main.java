@@ -13,13 +13,16 @@ import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
 import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.R;
+import com.pcr.myinfoweather.helpers.ConnectivityHelpers;
 import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.models.UserLocation;
 import com.pcr.myinfoweather.models.Weather;
 import com.pcr.myinfoweather.models.WeatherData;
 import com.pcr.myinfoweather.network.APIClient;
 import com.pcr.myinfoweather.request.UserLocationRequest;
+import com.pcr.myinfoweather.utils.SharedPreferencesData;
 
+import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -52,8 +55,8 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
     @InjectView(R.id.weatherTempMax) TextView tempMax;
     @InjectView(R.id.weatherTempMin) TextView tempMin;
     @InjectView(R.id.weatherTitle) TextView weatherTitle;
-    @InjectView(R.id.R.id.weatherIcon) ImageView weatherIcon;
-    @InjectView(R.id.R.id.weatherWind) TextView weatherWind;
+    @InjectView(R.id.weatherIcon) ImageView weatherIcon;
+    @InjectView(R.id.weatherWind) TextView weatherWind;
 
 
     @Override
@@ -80,7 +83,7 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
 
         startLoading();
 
-        if(!ConnectivityHelpers.hasConnectivity(context)) {
+        if(!ConnectivityHelpers.hasConnectivity(this)) {
             stopLoading();
             //show place holder
         }
@@ -93,23 +96,17 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
         super.onStop();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void getUserPreferences() {
+        //SharedPreferencesData.getInstance(this).
     }
 
     private void getLocationData() {
 
-//            mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
-//
-//            float lat = (float) mCurrentLocation.getLatitude();
-//            float lon = (float) mCurrentLocation.getLongitude();
-
         float lat = LocationData.getInstance().getLat();
         float lon = LocationData.getInstance().getLon();
 
-            new APIClient().getWeatherByGPS().createWith(lat, lon, "metric", callback);
-            System.out.println("log weatherAPIClient: " + weather);
+        new APIClient().getWeatherByGPS().createWith(lat, lon, "metric", callback);
+        System.out.println("log weatherAPIClient: " + weather);
     }
 
     private void configureWeatherCallbackByLocation() {
