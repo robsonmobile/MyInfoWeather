@@ -3,11 +3,10 @@ package com.pcr.myinfoweather.activities;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
@@ -15,12 +14,11 @@ import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.R;
 import com.pcr.myinfoweather.helpers.ConnectivityHelpers;
 import com.pcr.myinfoweather.models.LocationData;
-import com.pcr.myinfoweather.models.UserLocation;
-import com.pcr.myinfoweather.models.Weather;
 import com.pcr.myinfoweather.models.WeatherData;
 import com.pcr.myinfoweather.network.APIClient;
 import com.pcr.myinfoweather.request.UserLocationRequest;
-import com.pcr.myinfoweather.utils.SharedPreferencesData;
+
+import java.text.DecimalFormat;
 
 import butterknife.InjectView;
 import retrofit.Callback;
@@ -45,9 +43,9 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
     // Loading Views
     // -----------------------------------------------------------------------------------
     @InjectView(R.id.loadingMaxTemp) ProgressBar loadingMaxTemp;
-    @InjectView(R.id.loadingMinTemp) ProgressBar loadingMaxTemp;
-    @InjectView(R.id.loadingImageWeather) ProgressBar loadingMaxTemp;
-    @InjectView(R.id.loadingWind) ProgressBar loadingMaxTemp;
+    @InjectView(R.id.loadingMinTemp) ProgressBar loadingMinTemp;
+    @InjectView(R.id.loadingImageWeather) ProgressBar loadingWeatherImage;
+    @InjectView(R.id.loadingWind) ProgressBar loadingWind;
 
     // -----------------------------------------------------------------------------------
     // Weather Views
@@ -117,6 +115,8 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
                 System.out.println("log callback " + s);
                 weather = new GsonBuilder().create().fromJson(s, WeatherData.class);
                 System.out.println("log weather gsonbuilder: " + weather.getMain().getTemp());
+                stopLoading();
+                setWeatherConditionsOnViews();
             }
 
             @Override
@@ -160,6 +160,11 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
         weatherTitle.setVisibility(View.VISIBLE);
         weatherIcon.setVisibility(View.VISIBLE);
         weatherWind.setVisibility(View.VISIBLE);
+    }
+
+    private void setWeatherConditionsOnViews() {
+        String maxTempFormat = new DecimalFormat("##.#").format(weather.getMain().getTempMax());
+
     }
 
 }
