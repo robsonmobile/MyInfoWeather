@@ -17,6 +17,10 @@ import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.models.WeatherData;
 import com.pcr.myinfoweather.network.APIClient;
 import com.pcr.myinfoweather.request.UserLocationRequest;
+import com.pcr.myinfoweather.utils.Constants;
+import com.pcr.myinfoweather.utils.CurrentDateAndTime;
+import com.pcr.myinfoweather.utils.UserSessionManager;
+import com.pcr.myinfoweather.utils.Validators;
 
 import java.text.DecimalFormat;
 
@@ -55,6 +59,7 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
     @InjectView(R.id.weatherTitle) TextView weatherTitle;
     @InjectView(R.id.weatherIcon) ImageView weatherIcon;
     @InjectView(R.id.weatherWind) TextView weatherWind;
+    @InjectView(R.id.weatherCurrentDate) TextView weatherCurrentDate;
 
 
     @Override
@@ -103,7 +108,9 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
         float lat = LocationData.getInstance().getLat();
         float lon = LocationData.getInstance().getLon();
 
-        new APIClient().getWeatherByGPS().createWith(lat, lon, "metric", callback);
+        String unitType = UserSessionManager.getUnitTypePref(this);
+
+        new APIClient().getWeatherByGPS().createWith(lat, lon, unitType, callback);
         System.out.println("log weatherAPIClient: " + weather);
     }
 
@@ -163,7 +170,21 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
     }
 
     private void setWeatherConditionsOnViews() {
-        String maxTempFormat = new DecimalFormat("##.#").format(weather.getMain().getTempMax());
+
+        weatherCurrentDate.setText(CurrentDateAndTime.getInstance(this).getCurrentDate());
+        tempMax.setText(Validators.formatDecimal(weather.getMain().getTempMax()) + getTemperaturePrefs());
+        tempMax.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
+        weatherWind.setText(Validators.formatDecimal(weather.getWind().getSpeed()));
+        weatherTitle.setText(weather.getWeather().get(0).getDescription());
+
+    }
+
+    private String getTemperaturePrefs() {
+        if(UserSessionManager.hasTemperaturePref(this)) {
+            return UserSessionManager.getSavedTemperaturePref(this);
+        } else {
+            return "ºC"; //posteriormente retornará a unidade dependendo do lugar
+        }
 
     }
 

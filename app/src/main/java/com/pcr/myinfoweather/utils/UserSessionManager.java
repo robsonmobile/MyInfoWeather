@@ -15,6 +15,7 @@ public class UserSessionManager {
     public static void  registerTemperaturePref(Context context, String unit) {
         appPrefs(context).edit().remove(UNIT_PREF).commit();
         appPrefs(context).edit().putString(UNIT_PREF, unit).commit();
+
     }
 
     public static String getSavedTemperaturePref(Context context) {
@@ -23,6 +24,16 @@ public class UserSessionManager {
 
     public static boolean hasTemperaturePref(Context context) {
         return appPrefs(context).contains(UNIT_PREF);
+    }
+
+    public static String getUnitTypePref(Context context) {
+        if(getSavedTemperaturePref(context).equalsIgnoreCase("ºC")) {
+            return "metric";
+        } else if(getSavedTemperaturePref(context).equalsIgnoreCase("ºF")) {
+            return "imperial";
+        } else {
+            return "metric";
+        }
     }
 
     private static SharedPreferences appPrefs(Context context) {
