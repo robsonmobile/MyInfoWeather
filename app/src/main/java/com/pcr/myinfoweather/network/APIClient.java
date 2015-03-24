@@ -33,7 +33,7 @@ public class APIClient {
                     .setLogLevel((BuildConfig.DEBUG) ?
                             RestAdapter.LogLevel.FULL : RestAdapter.LogLevel.NONE)
 
-                    .setConverter(new GsonConverter(gson))
+                    .setConverter(new HandlerConverter())
                     .setClient(new OkClient())
                     .build();
         }
