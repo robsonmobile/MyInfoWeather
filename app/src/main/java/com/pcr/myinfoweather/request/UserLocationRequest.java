@@ -83,6 +83,17 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
 
     }
 
+//    private void getLocation() {
+//        if(mClient.isConnected()) {
+//            mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
+//            Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+//
+//            try {
+//
+//            }
+//        }
+//    }
+
     private void getCurrentLocation() {
         if(mClient.isConnected()) {
             mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);

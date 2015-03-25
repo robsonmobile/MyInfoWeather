@@ -17,13 +17,9 @@ import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.models.WeatherData;
 import com.pcr.myinfoweather.network.APIClient;
 import com.pcr.myinfoweather.request.UserLocationRequest;
-import com.pcr.myinfoweather.utils.Constants;
 import com.pcr.myinfoweather.utils.CurrentDateAndTime;
 import com.pcr.myinfoweather.utils.UserSessionManager;
 import com.pcr.myinfoweather.utils.Validators;
-
-import java.text.DecimalFormat;
-
 import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -46,10 +42,10 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
     // -----------------------------------------------------------------------------------
     // Loading Views
     // -----------------------------------------------------------------------------------
-    @InjectView(R.id.loadingMaxTemp) ProgressBar loadingMaxTemp;
-    @InjectView(R.id.loadingMinTemp) ProgressBar loadingMinTemp;
-    @InjectView(R.id.loadingImageWeather) ProgressBar loadingWeatherImage;
-    @InjectView(R.id.loadingWind) ProgressBar loadingWind;
+    @InjectView(R.id.loadingMaxTemp) View loadingMaxTempContainer;
+    @InjectView(R.id.loadingMinTemp) View loadingMinTemp;
+    @InjectView(R.id.loadingImageWeather) View loadingWeatherImage;
+    @InjectView(R.id.loadingWind) View loadingWind;
 
     // -----------------------------------------------------------------------------------
     // Weather Views
@@ -99,10 +95,6 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
         super.onStop();
     }
 
-    private void getUserPreferences() {
-        //SharedPreferencesData.getInstance(this).
-    }
-
     private void getLocationData() {
 
         float lat = LocationData.getInstance().getLat();
@@ -142,31 +134,31 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
 
     private void startLoading() {
         //Loading Visible
-        loadingMaxTemp.setVisibility(View.VISIBLE);
-        loadingMinTemp.setVisibility(View.VISIBLE);
-        loadingWeatherImage.setVisibility(View.VISIBLE);
-        loadingWind.setVisibility(View.VISIBLE);
+        loadingMaxTempContainer.setVisibility(View.VISIBLE);
+//        loadingMinTemp.setVisibility(View.VISIBLE);
+//        loadingWeatherImage.setVisibility(View.VISIBLE);
+//        loadingWind.setVisibility(View.VISIBLE);
 
         //Temperature text and Icons Invisible
-        tempMax.setVisibility(View.GONE);
-        tempMin.setVisibility(View.GONE);
-        weatherTitle.setVisibility(View.GONE);
-        weatherIcon.setVisibility(View.GONE);
-        weatherWind.setVisibility(View.GONE);
+//        tempMax.setVisibility(View.GONE);
+//        tempMin.setVisibility(View.GONE);
+//        weatherTitle.setVisibility(View.GONE);
+//        weatherIcon.setVisibility(View.GONE);
+//        weatherWind.setVisibility(View.GONE);
     }
 
     private void stopLoading() {
-        loadingMaxTemp.setVisibility(View.GONE);
-        loadingMinTemp.setVisibility(View.GONE);
-        loadingWeatherImage.setVisibility(View.GONE);
-        loadingWind.setVisibility(View.GONE);
+        loadingMaxTempContainer.setVisibility(View.GONE);
+//        loadingMinTemp.setVisibility(View.GONE);
+//        loadingWeatherImage.setVisibility(View.GONE);
+//        loadingWind.setVisibility(View.GONE);
 
         //Temperature text and Icons Invisible
-        tempMax.setVisibility(View.VISIBLE);
-        tempMin.setVisibility(View.VISIBLE);
-        weatherTitle.setVisibility(View.VISIBLE);
-        weatherIcon.setVisibility(View.VISIBLE);
-        weatherWind.setVisibility(View.VISIBLE);
+//        tempMax.setVisibility(View.VISIBLE);
+//        tempMin.setVisibility(View.VISIBLE);
+//        weatherTitle.setVisibility(View.VISIBLE);
+//        weatherIcon.setVisibility(View.VISIBLE);
+//        weatherWind.setVisibility(View.VISIBLE);
     }
 
     private void setWeatherConditionsOnViews() {
