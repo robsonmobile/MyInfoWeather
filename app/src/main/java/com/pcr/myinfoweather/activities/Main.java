@@ -28,7 +28,7 @@ import retrofit.client.Response;
 /**
  * Created by Paula Rosa on 04/03/2015.
  */
-public class Main extends ActionBarActivity implements UserLocationRequest.IListenerLocation {
+public class Main extends BaseActivity implements UserLocationRequest.IListenerLocation {
 
 
     private boolean isFinishedLocationRequest;
@@ -59,9 +59,18 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
 
 
     @Override
+    protected int layoutToInflate() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected boolean checkSessionOnStart() {
+        return false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         UserLocationRequest.getInstance(this).setListener(this);
         params = new Bundle();
@@ -72,8 +81,6 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
         super.onStart();
         configureWeatherCallbackByLocation();
         UserLocationRequest.getInstance(this).connectClient();
-
-
     }
 
     @Override
@@ -85,6 +92,9 @@ public class Main extends ActionBarActivity implements UserLocationRequest.IList
         if(!ConnectivityHelpers.hasConnectivity(this)) {
             stopLoading();
             //show place holder
+        }
+        if(UserLocationRequest.getInstance(this).isConnected()) {
+            getLocationData();
         }
     }
 
