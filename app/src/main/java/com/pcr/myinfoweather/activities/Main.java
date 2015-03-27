@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
@@ -96,6 +98,8 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         if(UserLocationRequest.getInstance(this).isConnected()) {
             getLocationData();
         }
+
+        UserLocationRequest.getInstance(this).connectClient();
     }
 
     @Override
@@ -130,7 +134,9 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
 
             @Override
             public void failure(RetrofitError error) {
-
+            //call placeholder
+                stopLoading();
+                Toast.makeText(Main.this, "failure call on callback", Toast.LENGTH_LONG).show();
             }
         };
     }
