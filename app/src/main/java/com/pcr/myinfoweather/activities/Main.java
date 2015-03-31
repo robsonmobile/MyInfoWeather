@@ -126,6 +126,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
             @Override
             public void success(String s, Response response) {
                 System.out.println("log callback " + s);
+
                 weather = new GsonBuilder().create().fromJson(s, WeatherData.class);
                 System.out.println("log weather gsonbuilder: " + weather.getMain().getTemp());
                 stopLoading();
@@ -180,10 +181,10 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     private void setWeatherConditionsOnViews() {
 
         weatherCurrentDate.setText(CurrentDateAndTime.getInstance(this).getCurrentDate());
-        tempMax.setText(Validators.formatDecimal(weather.getMain().getTempMax()) + getTemperaturePrefs());
-        tempMax.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
-        weatherWind.setText(Validators.formatDecimal(weather.getWind().getSpeed()));
-        weatherTitle.setText(weather.getWeather().get(0).getDescription());
+//        tempMax.setText(Validators.formatDecimal(weather.getWeatherDataList().get(0).getMain().getTempMax()) + getTemperaturePrefs());
+//        tempMax.setText(Validators.formatDecimal(weather.getWeatherDataList().get(0).getMain().getTempMin()) + getTemperaturePrefs());
+        //eatherWind.setText(Validators.formatDecimal(weather.getWeatherDataList().get(0).getWind().getSpeed()));
+        //weatherTitle.setText(weather.getWeatherDataList().get(0).getWeather().get(0).getDescription());
 
     }
 

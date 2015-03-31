@@ -22,7 +22,7 @@ public class APIClient {
     private static void createAdapterIfNeeded() {
 
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
+
                 .create();
 
         if(REST_ADAPTER == null) {
