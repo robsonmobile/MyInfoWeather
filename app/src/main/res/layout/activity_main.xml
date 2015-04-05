@@ -199,12 +199,12 @@
                                         android:layout_gravity="center"
                                         android:src="@drawable/thermometer_min_icon"/>
 
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical"
-                                        android:id="@+id/loadingMaxTempContainer"
-                                        >
+                                    <!--<LinearLayout-->
+                                        <!--android:layout_width="wrap_content"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:orientation="vertical"-->
+                                        <!--android:id="@+id/loadingMaxTempContainer"-->
+                                        <!-->-->
                                         <ProgressBar
                                             android:layout_width="65dp"
                                             android:layout_height="20dp"
@@ -213,7 +213,7 @@
                                             android:visibility="gone"/>
 
 
-                                    </LinearLayout>
+                                    <!--</LinearLayout>-->
 
 
                                     <TextView

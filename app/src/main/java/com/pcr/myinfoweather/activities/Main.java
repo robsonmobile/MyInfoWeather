@@ -44,7 +44,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     // -----------------------------------------------------------------------------------
     // Loading Views
     // -----------------------------------------------------------------------------------
-    @InjectView(R.id.loadingMaxTemp) View loadingMaxTempContainer;
+    @InjectView(R.id.loadingMaxTemp) View loadingMaxTemp;
     @InjectView(R.id.loadingMinTemp) View loadingMinTemp;
     @InjectView(R.id.loadingImageWeather) View loadingWeatherImage;
     @InjectView(R.id.loadingWind) View loadingWind;
@@ -151,40 +151,40 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
 
     private void startLoading() {
         //Loading Visible
-        loadingMaxTempContainer.setVisibility(View.VISIBLE);
-//        loadingMinTemp.setVisibility(View.VISIBLE);
-//        loadingWeatherImage.setVisibility(View.VISIBLE);
-//        loadingWind.setVisibility(View.VISIBLE);
+        loadingMaxTemp.setVisibility(View.VISIBLE);
+        loadingMinTemp.setVisibility(View.VISIBLE);
+        loadingWeatherImage.setVisibility(View.VISIBLE);
+        loadingWind.setVisibility(View.VISIBLE);
 
         //Temperature text and Icons Invisible
-//        tempMax.setVisibility(View.GONE);
-//        tempMin.setVisibility(View.GONE);
-//        weatherTitle.setVisibility(View.GONE);
-//        weatherIcon.setVisibility(View.GONE);
-//        weatherWind.setVisibility(View.GONE);
+        tempMax.setVisibility(View.GONE);
+        tempMin.setVisibility(View.GONE);
+        weatherTitle.setVisibility(View.GONE);
+        weatherIcon.setVisibility(View.GONE);
+        weatherWind.setVisibility(View.GONE);
     }
 
     private void stopLoading() {
-        loadingMaxTempContainer.setVisibility(View.GONE);
-//        loadingMinTemp.setVisibility(View.GONE);
-//        loadingWeatherImage.setVisibility(View.GONE);
-//        loadingWind.setVisibility(View.GONE);
+        loadingMaxTemp.setVisibility(View.GONE);
+        loadingMinTemp.setVisibility(View.GONE);
+        loadingWeatherImage.setVisibility(View.GONE);
+        loadingWind.setVisibility(View.GONE);
 
         //Temperature text and Icons Invisible
-//        tempMax.setVisibility(View.VISIBLE);
-//        tempMin.setVisibility(View.VISIBLE);
-//        weatherTitle.setVisibility(View.VISIBLE);
-//        weatherIcon.setVisibility(View.VISIBLE);
-//        weatherWind.setVisibility(View.VISIBLE);
+        tempMax.setVisibility(View.VISIBLE);
+        tempMin.setVisibility(View.VISIBLE);
+        weatherTitle.setVisibility(View.VISIBLE);
+        weatherIcon.setVisibility(View.VISIBLE);
+        weatherWind.setVisibility(View.VISIBLE);
     }
 
     private void setWeatherConditionsOnViews() {
 
         weatherCurrentDate.setText(CurrentDateAndTime.getInstance(this).getCurrentDate());
-//        tempMax.setText(Validators.formatDecimal(weather.getWeatherDataList().get(0).getMain().getTempMax()) + getTemperaturePrefs());
+        tempMax.setText(Validators.formatDecimal(weather.getMain().getTempMax()) + getTemperaturePrefs());
         tempMin.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
-        //eatherWind.setText(Validators.formatDecimal(weather.getWeatherDataList().get(0).getWind().getSpeed()));
-        //weatherTitle.setText(weather.getWeatherDataList().get(0).getWeather().get(0).getDescription());
+        weatherWind.setText(Validators.formatDecimal(weather.getWind().getSpeed()));
+        weatherTitle.setText(weather.getWeather().get(0).getDescription());
 
     }
 
