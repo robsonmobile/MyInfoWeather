@@ -7,6 +7,7 @@ import com.pcr.myinfoweather.R;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.DecimalFormat;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
 
@@ -35,5 +36,9 @@ public class Validators {
             Toast.makeText(ctx, R.string.toast_invalid_city_name, Toast.LENGTH_LONG).show();
             return "";
         }
+    }
+
+    public static String formatDecimal(float number) {
+        return new DecimalFormat("##.#").format(number);
     }
 }

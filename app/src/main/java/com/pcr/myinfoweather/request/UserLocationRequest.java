@@ -10,6 +10,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
 import com.pcr.myinfoweather.interfaces.ILocationListener;
 import com.pcr.myinfoweather.models.LocationData;
 import java.io.IOException;
@@ -30,6 +31,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
     private IListenerLocation mListener;
     private GoogleApiClient mClient;
     private FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
+    GoogleMap test;
 
 
 
@@ -82,6 +84,17 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
+
+//    private void getLocation() {
+//        if(mClient.isConnected()) {
+//            mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
+//            Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+//
+//            try {
+//
+//            }
+//        }
+//    }
 
     private void getCurrentLocation() {
         if(mClient.isConnected()) {
