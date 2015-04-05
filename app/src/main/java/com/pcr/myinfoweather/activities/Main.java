@@ -182,7 +182,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
 
         weatherCurrentDate.setText(CurrentDateAndTime.getInstance(this).getCurrentDate());
 //        tempMax.setText(Validators.formatDecimal(weather.getWeatherDataList().get(0).getMain().getTempMax()) + getTemperaturePrefs());
-//        tempMax.setText(Validators.formatDecimal(weather.getWeatherDataList().get(0).getMain().getTempMin()) + getTemperaturePrefs());
+        tempMin.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
         //eatherWind.setText(Validators.formatDecimal(weather.getWeatherDataList().get(0).getWind().getSpeed()));
         //weatherTitle.setText(weather.getWeatherDataList().get(0).getWeather().get(0).getDescription());
 
@@ -192,7 +192,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         if(UserSessionManager.hasTemperaturePref(this)) {
             return UserSessionManager.getSavedTemperaturePref(this);
         } else {
-            return "ºC"; //posteriormente retornará a unidade dependendo do lugar
+            return "Â°C"; //posteriormente retornarï¿½ a unidade dependendo do lugar
         }
 
     }
