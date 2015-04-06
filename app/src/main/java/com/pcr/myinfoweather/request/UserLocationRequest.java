@@ -13,6 +13,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.pcr.myinfoweather.interfaces.ILocationListener;
 import com.pcr.myinfoweather.models.LocationData;
+import com.pcr.myinfoweather.utils.Constants;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +97,30 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
 //            }
 //        }
 //    }
+
+    private void getCurrentLocationData(int locationType) {
+        if(isConnected()) {
+            mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
+            Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+
+            switch (locationType) {
+                case Constants.PATH_FOR_GEOLOCATION:
+                    try {
+                        List<Address> addressList = geocoder.getFromLocation(LocationData.getInstance().getLat(),
+                                LocationData.getInstance().getLon(), 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                case Constants.PATH_FOR_CITY:
+                    try {
+                        List<Address> addressList = geocoder.getFromLocationName(LocationData.getInstance().getCity(), 10);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+        }
+    }
+
 
     private void getCurrentLocation() {
         if(mClient.isConnected()) {
