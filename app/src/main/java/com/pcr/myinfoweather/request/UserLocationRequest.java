@@ -100,7 +100,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
 
     private void getCurrentLocationData(int locationType) {
         if(isConnected()) {
-            mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
+            //mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
             Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
 
             switch (locationType) {
@@ -121,36 +121,115 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
         }
     }
 
+    private void getLocationByGPS() {
+        mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
+
+        float lat = (float) mCurrentLocation.getLatitude();
+        float lon = (float) mCurrentLocation.getLongitude();
+
+        LocationData.getInstance().setLat(lat);
+        LocationData.getInstance().setLon(lon);
+
+        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+
+        try {
+            List<Address> listLocation = geocoder.getFromLocation(lat, lon, 1);
+            if (listLocation != null && listLocation.size() > 0) {
+                Address address = listLocation.get(0);
+
+                //set the data on Model
+                LocationData.getInstance().setCity(address.getSubAdminArea());
+                LocationData.getInstance().setState(address.getAdminArea());
+                LocationData.getInstance().setCountry(address.getCountryCode());
+
+                //getWeatherData();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
+
 
     private void getCurrentLocation() {
         if(mClient.isConnected()) {
             mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
+
             float lat = (float) mCurrentLocation.getLatitude();
             float lon = (float) mCurrentLocation.getLongitude();
             System.out.println("log passou aqui");
-            LocationData.getInstance().setLat(lat);
-            LocationData.getInstance().setLon(lon);
+
+            LocationData.getInstance().setLat((float) mCurrentLocation.getLatitude());
+            LocationData.getInstance().setLon((float) mCurrentLocation.getLongitude());
+
             Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
 
             try {
                 List<Address> listLocation = geocoder.getFromLocation(lat, lon, 1);
                 if (listLocation != null && listLocation.size() > 0) {
                     Address address = listLocation.get(0);
-                    String state = address.getAdminArea();
-                    String city = address.getSubAdminArea();
-                    String country = address.getCountryCode();
 
                     //set the data on Model
-                    LocationData.getInstance().setCity(city);
-                    LocationData.getInstance().setState(state);
-                    LocationData.getInstance().setCountry(country);
-
-                    //getWeatherData();
+                    LocationData.getInstance().setCity(address.getSubAdminArea());
+                    LocationData.getInstance().setState(address.getAdminArea());
+                    LocationData.getInstance().setCountry(address.getCountryCode());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+        }
+    }
+
+    public void getLocationByCityName(String cityName) {
+        String stateStr = null;
+        String cityStr = null;
+        String countryStr = null;
+        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+        try {
+            List<Address> listLocation = geocoder.getFromLocationName(cityName, 10);
+            ArrayList<String> listCity = new ArrayList<String>();
+            ArrayList<Address> listCityPosition = new ArrayList<Address>();
+            if (listLocation != null && listLocation.size() > 0) {
+                Address address;
+                if(listLocation.size() > 1) {
+                    for(int i = 0; i < listLocation.size(); i++) {
+                        address = listLocation.get(i);
+                        stateStr = address.getAdminArea();
+                        cityStr = address.getSubAdminArea();
+                        countryStr = address.getCountryCode();
+
+                        String addressCity = cityStr + " - " + stateStr + " - " + countryStr;
+                        if(stateStr != null && cityStr != null && countryStr != null) {
+                            listCity.add(addressCity);
+                            listCityPosition.add(listLocation.get(i));
+                        }
+
+                        System.out.println("log citydata: " + listCity);
+                    }
+                    // OptionsDialogBuilder dialogOptions = new OptionsDialogBuilder();
+                    // dialogOptions.show(getSupportFragmentManager(), "cityOptionsDialog");
+                    //mListener.onCitiesToChoose(listCity, listCityPosition);
+                } else {
+                    System.out.println("log listaddress: " + listLocation);
+                    cityStr = null;
+                    stateStr = null;
+                    countryStr = null;
+                    address = listLocation.get(0);
+                    stateStr = validateNullString(address.getAdminArea());
+                    cityStr = validateNullString(address.getSubAdminArea());
+                    countryStr = validateNullString(address.getCountryCode());
+
+                    LocationData.getInstance().setCity(cityStr);
+                    LocationData.getInstance().setState(stateStr);
+                    LocationData.getInstance().setCountry(countryStr);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
