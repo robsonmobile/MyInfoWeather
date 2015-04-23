@@ -121,7 +121,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
         }
     }
 
-    private void getLocationByGPS() {
+    public String getLocationByGPS() {
         mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
 
         float lat = (float) mCurrentLocation.getLatitude();
@@ -131,6 +131,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
         LocationData.getInstance().setLon(lon);
 
         Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+        String completeLocation = null;
 
         try {
             List<Address> listLocation = geocoder.getFromLocation(lat, lon, 1);
@@ -143,10 +144,21 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
                 LocationData.getInstance().setCountry(address.getCountryCode());
 
                 //getWeatherData();
+
+                return completeLocation = LocationData.getInstance().getCity() + ", " +
+                        LocationData.getInstance().getState() + " - " +
+                        LocationData.getInstance().getCountry();
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return completeLocation = "Can´t find location, turn on GPS";
         }
+
+        return null;
+
+    }
+
+    private void getLocationByCityName() {
 
     }
 

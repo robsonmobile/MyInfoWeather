@@ -15,6 +15,7 @@ import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.R;
 import com.pcr.myinfoweather.helpers.ConnectivityHelpers;
 import com.pcr.myinfoweather.models.LocationData;
+import com.pcr.myinfoweather.models.UserLocation;
 import com.pcr.myinfoweather.models.WeatherData;
 import com.pcr.myinfoweather.network.APIClient;
 import com.pcr.myinfoweather.request.UserLocationRequest;
@@ -47,6 +48,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     @InjectView(R.id.loadingMinTemp) View loadingMinTemp;
     @InjectView(R.id.loadingImageWeather) View loadingWeatherImage;
     @InjectView(R.id.loadingWind) View loadingWind;
+    @InjectView(R.id.loadingLocation) View loadingLocation;
 
     // -----------------------------------------------------------------------------------
     // Weather Views
@@ -58,6 +60,11 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     @InjectView(R.id.weatherWind) TextView weatherWind;
     @InjectView(R.id.weatherCurrentDate) TextView weatherCurrentDate;
 
+    // -----------------------------------------------------------------------------------
+    // TabBar Views
+    // -----------------------------------------------------------------------------------
+    @InjectView(R.id.weatherLocationText) TextView location;
+    @InjectView(R.id.weatherCurrentDate) TextView currentDate;
 
     @Override
     protected int layoutToInflate() {
@@ -154,6 +161,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         loadingMinTemp.setVisibility(View.VISIBLE);
         loadingWeatherImage.setVisibility(View.VISIBLE);
         loadingWind.setVisibility(View.VISIBLE);
+        loadingLocation.setVisibility(View.VISIBLE);
 
         //Temperature text and Icons Invisible
         tempMax.setVisibility(View.GONE);
@@ -161,6 +169,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         weatherTitle.setVisibility(View.GONE);
         weatherIcon.setVisibility(View.GONE);
         weatherWind.setVisibility(View.GONE);
+        location.setVisibility(View.GONE);
     }
 
     private void stopLoading() {
@@ -168,6 +177,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         loadingMinTemp.setVisibility(View.GONE);
         loadingWeatherImage.setVisibility(View.GONE);
         loadingWind.setVisibility(View.GONE);
+        loadingLocation.setVisibility(View.GONE);
 
         //Temperature text and Icons Invisible
         tempMax.setVisibility(View.VISIBLE);
@@ -175,6 +185,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         weatherTitle.setVisibility(View.VISIBLE);
         weatherIcon.setVisibility(View.VISIBLE);
         weatherWind.setVisibility(View.VISIBLE);
+        location.setVisibility(View.VISIBLE);
     }
 
     private void setWeatherConditionsOnViews() {
@@ -184,6 +195,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         tempMin.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
         weatherWind.setText(Validators.formatDecimal(weather.getWind().getSpeed()));
         weatherTitle.setText(weather.getWeather().get(0).getDescription());
+        location.setText(UserLocationRequest.getInstance(this).getLocationByGPS());
 
     }
 
