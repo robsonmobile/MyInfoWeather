@@ -151,7 +151,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return completeLocation = "Can´t find location, turn on GPS";
+            return completeLocation = "Unavailable location";
         }
 
         return null;

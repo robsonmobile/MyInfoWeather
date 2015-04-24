@@ -20,6 +20,7 @@ import com.pcr.myinfoweather.models.WeatherData;
 import com.pcr.myinfoweather.network.APIClient;
 import com.pcr.myinfoweather.request.UserLocationRequest;
 import com.pcr.myinfoweather.utils.CurrentDateAndTime;
+import com.pcr.myinfoweather.utils.Intents;
 import com.pcr.myinfoweather.utils.UserSessionManager;
 import com.pcr.myinfoweather.utils.Validators;
 import butterknife.InjectView;
@@ -49,6 +50,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     @InjectView(R.id.loadingImageWeather) View loadingWeatherImage;
     @InjectView(R.id.loadingWind) View loadingWind;
     @InjectView(R.id.loadingLocation) View loadingLocation;
+    @InjectView(R.id.loadingCurrentDate) View loadingCurrentDate;
 
     // -----------------------------------------------------------------------------------
     // Weather Views
@@ -144,6 +146,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
             //call placeholder
                 stopLoading();
                 Toast.makeText(Main.this, "failure call on callback", Toast.LENGTH_LONG).show();
+                startActivity(Intents.toPlaceholder(Main.this));
             }
         };
     }
@@ -162,6 +165,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         loadingWeatherImage.setVisibility(View.VISIBLE);
         loadingWind.setVisibility(View.VISIBLE);
         loadingLocation.setVisibility(View.VISIBLE);
+        loadingCurrentDate.setVisibility(View.VISIBLE);
 
         //Temperature text and Icons Invisible
         tempMax.setVisibility(View.GONE);
@@ -170,6 +174,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         weatherIcon.setVisibility(View.GONE);
         weatherWind.setVisibility(View.GONE);
         location.setVisibility(View.GONE);
+        currentDate.setVisibility(View.GONE);
     }
 
     private void stopLoading() {
@@ -178,6 +183,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         loadingWeatherImage.setVisibility(View.GONE);
         loadingWind.setVisibility(View.GONE);
         loadingLocation.setVisibility(View.GONE);
+        loadingCurrentDate.setVisibility(View.GONE);
 
         //Temperature text and Icons Invisible
         tempMax.setVisibility(View.VISIBLE);
@@ -186,6 +192,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         weatherIcon.setVisibility(View.VISIBLE);
         weatherWind.setVisibility(View.VISIBLE);
         location.setVisibility(View.VISIBLE);
+        currentDate.setVisibility(View.VISIBLE);
     }
 
     private void setWeatherConditionsOnViews() {

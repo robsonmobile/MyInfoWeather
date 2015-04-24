@@ -33,38 +33,66 @@
                 android:layout_marginTop="10dp"
                 android:text="MyInfoWeather"
                 android:textSize="20sp"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                android:layout_weight="1"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                >
+
+                <ProgressBar
+                    android:layout_width="65dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/loadingLocation"
+                    android:layout_gravity="center"
+                    android:visibility="visible"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="18sp"
+                    android:layout_gravity="left"
+                    android:textStyle="italic"
+                    android:id="@+id/weatherLocationText"
+                    android:textColor="@android:color/white"
+                    android:lines="1"/>
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            >
 
             <ProgressBar
                 android:layout_width="65dp"
                 android:layout_height="20dp"
-                android:id="@+id/loadingLocation"
+                android:id="@+id/loadingCurrentDate"
                 android:layout_gravity="center"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="14 de novembro de 2014"
+                    android:textSize="18sp"
+                    android:layout_gravity="left"
+                    android:layout_marginBottom="5dp"
+                    android:textStyle="italic"
+                    android:id="@+id/weatherCurrentDate"
+                    android:textColor="@android:color/white"
+                    android:layout_weight="1"
+                    android:visibility="gone"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="18sp"
-                android:layout_gravity="left"
-                android:layout_marginTop="30dp"
-                android:textStyle="italic"
-                android:id="@+id/weatherLocationText"
-                android:textColor="@android:color/white"
-                android:lines="1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="14 de novembro de 2014"
-                android:textSize="18sp"
-                android:layout_gravity="left"
-                android:layout_marginBottom="5dp"
-                android:textStyle="italic"
-                android:id="@+id/weatherCurrentDate"
-                android:textColor="@android:color/white"/>
+            </LinearLayout>
         </LinearLayout>
 
     </android.support.v7.widget.Toolbar>

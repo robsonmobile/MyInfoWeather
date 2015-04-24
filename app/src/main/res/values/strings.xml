@@ -27,5 +27,6 @@
     <string name="update_interval">Update interval</string>
     <string name="message_close">Close</string>
     <string name="analog_name">analog</string>
+    <string name="unavailable_location">"Unavailable location"</string>
 
 </resources>
