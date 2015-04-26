@@ -27,9 +27,9 @@ public class UserSessionManager {
     }
 
     public static String getUnitTypePref(Context context) {
-        if(getSavedTemperaturePref(context).equalsIgnoreCase("ºC")) {
+        if(getSavedTemperaturePref(context).equalsIgnoreCase("C")) {
             return "metric";
-        } else if(getSavedTemperaturePref(context).equalsIgnoreCase("ºF")) {
+        } else if(getSavedTemperaturePref(context).equalsIgnoreCase("F")) {
             return "imperial";
         } else {
             return "metric";

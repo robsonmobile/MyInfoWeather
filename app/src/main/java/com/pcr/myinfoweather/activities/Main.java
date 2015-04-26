@@ -23,6 +23,8 @@ import com.pcr.myinfoweather.utils.CurrentDateAndTime;
 import com.pcr.myinfoweather.utils.Intents;
 import com.pcr.myinfoweather.utils.UserSessionManager;
 import com.pcr.myinfoweather.utils.Validators;
+import com.pcr.myinfoweather.utils.WeatherIconChooser;
+
 import butterknife.InjectView;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -101,11 +103,12 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
 
         if(!ConnectivityHelpers.hasConnectivity(this)) {
             stopLoading();
+            Intents.toPlaceholder(this);
             //show place holder
         }
-        if(UserLocationRequest.getInstance(this).isConnected()) {
-            getLocationData();
-        }
+//        if(UserLocationRequest.getInstance(this).isConnected()) {
+//            getLocationData();
+//        }
 
         UserLocationRequest.getInstance(this).connectClient();
     }
@@ -202,7 +205,9 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         tempMin.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
         weatherWind.setText(Validators.formatDecimal(weather.getWind().getSpeed()));
         weatherTitle.setText(weather.getWeather().get(0).getDescription());
+        weatherIcon.setImageResource(new WeatherIconChooser().setImageResource(weather.getWeather().get(0).getId()));
         location.setText(UserLocationRequest.getInstance(this).getLocationByGPS());
+
 
     }
 
