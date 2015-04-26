@@ -33,9 +33,6 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
     private IListenerLocation mListener;
     private GoogleApiClient mClient;
     private FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
-    GoogleMap test;
-
-
 
     public static UserLocationRequest getInstance(Context context) {
         if(instance == null) {
@@ -326,4 +323,6 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
             return input;
         }
     }
+
+
 }
