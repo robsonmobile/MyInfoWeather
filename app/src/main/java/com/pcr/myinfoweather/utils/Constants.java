@@ -1,5 +1,7 @@
 package com.pcr.myinfoweather.utils;
 
+import java.util.ArrayList;
+
 /**
  * Created by Paula on 08/11/2014.
  */
@@ -58,5 +60,20 @@ public class Constants {
     public static final int PREF_TYPE_UPDATE_INTERVAL = 1;
     //DEFAULT 30 MINUTOS
     public static final long PREF_DEFAULT_UPDATE_INTERVAL = 1800000;
+
+    //weather Codes
+    public static final ArrayList WEATHER_THUNDERSTORM_CODE = new ArrayList<Integer>();
+
+    public static final int WEATHER_THUNDERSTORM_MIN = 200;
+    public static final int WEATHER_THUNDERSTORM_MAX = 231;
+
+    public static final int WEATHER_SHOWER_RAIN_MIN = 300;
+    public static final int WEATHER_SHOWER_RAIN_MAX = 321;
+
+    public static final int WEATHER_RAIN_MIN = 500;
+    public static final int WEATHER_RAIN_MAX = 504;
+
+
+
 
 }

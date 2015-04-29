@@ -1,9 +1,7 @@
 package com.pcr.myinfoweather.utils;
 
-import android.content.Context;
 
 import com.pcr.myinfoweather.R;
-
 import java.util.Calendar;
 
 /**
@@ -11,7 +9,14 @@ import java.util.Calendar;
  */
 public class WeatherIconChooser {
 
-    private int isDayorNight() {
+    public WeatherIconChooser(int weatherCode)
+    {
+        this.currentWeatherCode = weatherCode;
+    }
+
+    private int currentWeatherCode = 0;
+
+    private boolean isDay() {
         //get Instances
         Calendar currentCalendar = Calendar.getInstance();
         long currentDateTime = currentCalendar.getTimeInMillis();
@@ -34,43 +39,78 @@ public class WeatherIconChooser {
         long nightDate = nightCalendar.getTimeInMillis();
 
         //set
-        if(currentDateTime >= dayDate && nightDate >= currentDateTime) {
-            return Constants.TIME_DAY;
-        } else {
-            return Constants.TIME_NIGHT;
-        }
+        return currentDateTime >= dayDate && nightDate >= currentDateTime;
     }
 
-    public int setImageResource(int wearCode) {
-        float result = (wearCode/2);
-        if(result >= 100 && result <= 115.5) {
+    public int getImageResource() {
+        if(isThunderstormWeather()) {
             return R.drawable.wc_thunderstorm;
-        } else if ((result >= 150 && result <= 160.5) || (result >=260 && result <= 265.5)) {
+        } else if (isShowerRainWeather()) {
             return R.drawable.wc_shower_rain;
-        } else if(result >= 250 && result <= 252) {
+        } else if(isRainWeather()) {
             return R.drawable.wc_rain;
-        } else if(result == 255.5 || (result >= 300 && result <= 311)) {
+        } else if(isSnowWeather()) {
             return R.drawable.wc_snow;
-        } else if(result == 400) {
-            if(isDayorNight() == Constants.TIME_DAY) {
-                return R.drawable.wc_clear_sky_day;
-            } else {
-                return R.drawable.wc_clear_sky_night;
-            }
-        } else if(result == 400.5) {
-            if(isDayorNight() == Constants.TIME_NIGHT) {
-                return R.drawable.wc_few_clouds_day;
-            } else {
-                return R.drawable.wc_few_clouds_night;
-            }
-        } else if(result == 401) {
+        } else if(isClearSkyDayWeather()) {
+            return R.drawable.wc_clear_sky_day;
+        } else if(isClearSkyNightWeather()) {
+            return R.drawable.wc_clear_sky_night;
+        } else if(isFewCloudsDayWeather()) {
+            return R.drawable.wc_few_clouds_day;
+        } else if(isFewCloudsNightWeather()) {
+            return R.drawable.wc_few_clouds_night;
+        }else if(isScatteredCloudsWeather()) {
             return R.drawable.wc_scattered_clouds;
-        } else if(result == 401.5 || result == 402) {
+        } else if(isBrokenCloudsWeather()) {
             return R.drawable.wc_broken_clouds;
-        } else if(result >= 350 && result <= 390.5) {
+        } else if(isMistWeather()) {
             return R.drawable.wc_mist;
         }
         return 0;
+    }
+
+    private boolean isFewCloudsNightWeather() {
+        return currentWeatherCode == 801 && !isDay();
+    }
+
+    private boolean isFewCloudsDayWeather() {
+        return currentWeatherCode == 801 && isDay();
+    }
+
+    private boolean isClearSkyNightWeather() {
+        return currentWeatherCode == 800 && !isDay();
+    }
+
+    private boolean isClearSkyDayWeather() {
+        return currentWeatherCode == 800 && isDay();
+    }
+
+    private boolean isMistWeather() {
+        return currentWeatherCode >= 700 && currentWeatherCode <= 781;
+    }
+
+    private boolean isBrokenCloudsWeather() {
+        return currentWeatherCode == 803 || currentWeatherCode == 804;
+    }
+
+    private boolean isScatteredCloudsWeather() {
+        return currentWeatherCode == 802;
+    }
+
+    private boolean isSnowWeather() {
+        return currentWeatherCode == 511 || (currentWeatherCode >= 600 && currentWeatherCode <= 622);
+    }
+
+    private boolean isRainWeather() {
+        return currentWeatherCode >= 500 && currentWeatherCode <= 504;
+    }
+
+    private boolean isShowerRainWeather() {
+        return (currentWeatherCode >= 300 && currentWeatherCode <= 321) || (currentWeatherCode >=520 && currentWeatherCode <= 531);
+    }
+
+    private boolean isThunderstormWeather() {
+        return currentWeatherCode >= 200 && currentWeatherCode <= 231;
     }
 
 

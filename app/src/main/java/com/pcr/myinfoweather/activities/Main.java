@@ -200,12 +200,15 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
 
     private void setWeatherConditionsOnViews() {
 
+        int weatherCode = weather.getWeather().get(0).getId();
+
         weatherCurrentDate.setText(CurrentDateAndTime.getInstance(this).getCurrentDate());
         tempMax.setText(Validators.formatDecimal(weather.getMain().getTempMax()) + getTemperaturePrefs());
         tempMin.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
         weatherWind.setText(Validators.formatDecimal(weather.getWind().getSpeed()));
         weatherTitle.setText(weather.getWeather().get(0).getDescription());
-        weatherIcon.setImageResource(new WeatherIconChooser().setImageResource(weather.getWeather().get(0).getId()));
+        weatherIcon.setImageResource(new WeatherIconChooser(weatherCode).getImageResource());
+
         location.setText(UserLocationRequest.getInstance(this).getLocationByGPS());
 
 

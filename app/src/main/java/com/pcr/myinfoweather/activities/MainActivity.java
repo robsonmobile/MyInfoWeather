@@ -27,9 +27,8 @@ import com.pcr.myinfoweather.interfaces.IDialog;
 import com.pcr.myinfoweather.interfaces.INetworkConnection;
 import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.models.WeatherData;
-import com.pcr.myinfoweather.models.weather.Weatherx;
+import com.pcr.myinfoweather.models.weather.User;
 import com.pcr.myinfoweather.network.APIClient;
-import com.pcr.myinfoweather.network.JsonParsers;
 import com.pcr.myinfoweather.request.AppHttpClient;
 import com.pcr.myinfoweather.request.UserLocationRequest;
 import com.pcr.myinfoweather.response.WeatherHttpResponseHandler;
@@ -42,15 +41,10 @@ import com.pcr.myinfoweather.utils.GeneratePathRequest;
 import com.pcr.myinfoweather.utils.SharedPreferencesData;
 import com.pcr.myinfoweather.utils.Validators;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.util.List;
 
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener, IDialog, UserLocationRequest.IListenerLocation, INetworkConnection {
 
@@ -146,52 +140,52 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private void configureCityCallback() {
 
-        callbackCity = new Callback<String>() {
-            @Override
-            public void success(String s, Response response) {
-                try {
-                    Weatherx weather = JsonParsers.parseWeather(new JSONObject(s));
-                    setWeatherData(weather);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    //implementar:
-                    notifyValidationError("Não foi possível conectar com o servidor");
-                    //fazer placeholder
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                //notifyValidationError("Não foi possível conectar com o servidor");
-                notifyValidationError(error.getMessage());
-
-            }
-        };
+//        callbackCity = new Callback<String>() {
+//            @Override
+//            public void success(String s, Response response) {
+//                try {
+//                    //Weatherx weather = JsonParsers.parseWeather(new JSONObject(s));
+//                    setWeatherData(weather);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    //implementar:
+//                    notifyValidationError("Não foi possível conectar com o servidor");
+//                    //fazer placeholder
+//                }
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                //notifyValidationError("Não foi possível conectar com o servidor");
+//                notifyValidationError(error.getMessage());
+//
+//            }
+//        };
     }
 
-    private void configureGeoLocationCallback() {
-        callbackGeolocation = new Callback<String>() {
-            @Override
-            public void success(String s, Response response) {
-                try {
-                    Weatherx weather = JsonParsers.parseWeather(new JSONObject(s));
-                    System.out.println("log response geo: " + s);
-                    setWeatherData(weather);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    notifyValidationError("Não foi possível conectar com o servidor");
-                }
+//    private void configureGeoLocationCallback() {
+//        callbackGeolocation = new Callback<String>() {
+//            @Override
+//            public void success(String s, Response response) {
+//                try {
+//                    //Weatherx weather = JsonParsers.parseWeather(new JSONObject(s));
+//                    System.out.println("log response geo: " + s);
+//                    setWeatherData(weather);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    notifyValidationError("Não foi possível conectar com o servidor");
+//                }
+//
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                notifyValidationError(error.getMessage());
+//            }
+//        };
+//    }
 
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                notifyValidationError(error.getMessage());
-            }
-        };
-    }
-
-    private void setWeatherData(Weatherx weather) {
+    private void setWeatherData(User weather) {
         //pegar os valores que foram setados através do builder da classe, e colocar em cada item,
         //primeiramente sem distinção de temperatura (F e C), colocar somente em celcius.
 
@@ -294,7 +288,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onStart();
         UserLocationRequest.getInstance(this).connectClient();
         configureCityCallback();
-        configureGeoLocationCallback();
+        //configureGeoLocationCallback();
     }
 
     @Override
