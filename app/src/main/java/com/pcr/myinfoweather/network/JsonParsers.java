@@ -13,15 +13,20 @@ public class JsonParsers {
     public static User parseWeather(JSONObject weatherJson) throws JSONException {
         if(weatherJson != null) {
             return User.newBuilder()
+                    //.withTitle(weatherJson.getJSONObject("main")
                     .withTempMax((float) weatherJson.getJSONObject("main").getDouble("temp_max"))
-                    .withTemp((float) weatherJson.getJSONObject("main").getDouble("temp"))
                     .withTempMin((float) weatherJson.getJSONObject("main").getDouble("temp_min"))
-                    .withSpeed((float) weatherJson.getJSONObject("wind").getDouble("speed"))
+                    .withWindSpeed((float) weatherJson.getJSONObject("wind").getDouble("speed"))
+
+
+
                     .build();
         }
 
         return null;
     }
+
+
 
 
 

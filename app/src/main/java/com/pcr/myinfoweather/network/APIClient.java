@@ -21,10 +21,6 @@ public class APIClient {
 
     private static void createAdapterIfNeeded() {
 
-        Gson gson = new GsonBuilder()
-
-                .create();
-
         if(REST_ADAPTER == null) {
             REST_ADAPTER = new RestAdapter.Builder()
 

@@ -10,8 +10,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
-import com.pcr.myinfoweather.interfaces.ILocationListener;
 import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.utils.Constants;
 
@@ -29,7 +27,6 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
     private static UserLocationRequest instance;
     private Context mContext;
     private Location mCurrentLocation;
-    private UserLocationRequest mInstance;
     private IListenerLocation mListener;
     private GoogleApiClient mClient;
     private FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
@@ -74,26 +71,10 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
 
     }
 
-//    @Override
-//    public void onDisconnected() {
-//
-//    }
-
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
-
-//    private void getLocation() {
-//        if(mClient.isConnected()) {
-//            mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
-//            Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
-//
-//            try {
-//
-//            }
-//        }
-//    }
 
     private void getCurrentLocationData(int locationType) {
         if(isConnected()) {
@@ -116,6 +97,47 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
                     }
             }
         }
+    }
+
+    public ArrayList<Float> getGPSLocation() {
+        ArrayList<Float> geoData = new ArrayList<Float>();
+
+        mCurrentLocation = fusedLocationProviderApi.getLastLocation(mClient);
+        float lat = (float) mCurrentLocation.getLatitude();
+        float lon = (float) mCurrentLocation.getLongitude();
+
+        geoData.add(lat);
+        geoData.add(lon);
+
+        return geoData;
+    }
+
+    public ArrayList<String> getAddress(com.pcr.myinfoweather.models.Location gpsData) {
+        ArrayList<String> address = new ArrayList<String>();
+
+        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+
+        try {
+            List<Address> listLocation = geocoder.getFromLocation(gpsData.getLatitude(), gpsData.getLongitude(),
+                    Constants.LIST_ONE_RESULT);
+
+            if (listLocation != null && listLocation.size() > 0) {
+                Address addresses = listLocation.get(0);
+
+                address.add(addresses.getSubAdminArea());
+                address.add(addresses.getAdminArea());
+                address.add(addresses.getCountryCode());
+
+                return address;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            address.add("Unavailable location");
+            return address;
+        }
+
+        return null;
+
     }
 
     public String getLocationByGPS() {
@@ -259,6 +281,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
         String countryStr = null;
         Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
         try {
+
             List<Address> listLocation = geocoder.getFromLocationName(cityName, 10);
             ArrayList<String> listCity = new ArrayList<String>();
             ArrayList<Address> listCityPosition = new ArrayList<Address>();

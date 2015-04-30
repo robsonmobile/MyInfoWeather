@@ -1,5 +1,6 @@
 package com.pcr.myinfoweather.activities;
 
+import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -17,13 +18,19 @@ import com.pcr.myinfoweather.helpers.ConnectivityHelpers;
 import com.pcr.myinfoweather.models.LocationData;
 import com.pcr.myinfoweather.models.UserLocation;
 import com.pcr.myinfoweather.models.WeatherData;
+import com.pcr.myinfoweather.models.weather.User;
+import com.pcr.myinfoweather.models.weather.UserAdress;
 import com.pcr.myinfoweather.network.APIClient;
+import com.pcr.myinfoweather.network.JsonParsers;
+import com.pcr.myinfoweather.network.WeatherParse;
 import com.pcr.myinfoweather.request.UserLocationRequest;
 import com.pcr.myinfoweather.utils.CurrentDateAndTime;
 import com.pcr.myinfoweather.utils.Intents;
 import com.pcr.myinfoweather.utils.UserSessionManager;
 import com.pcr.myinfoweather.utils.Validators;
 import com.pcr.myinfoweather.utils.WeatherIconChooser;
+
+import java.util.ArrayList;
 
 import butterknife.InjectView;
 import retrofit.Callback;
@@ -141,7 +148,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
                 weather = new GsonBuilder().create().fromJson(s, WeatherData.class);
                 System.out.println("log weather gsonbuilder: " + weather.getMain().getTemp());
                 stopLoading();
-                setWeatherConditionsOnViews();
+                parseData();
             }
 
             @Override
@@ -198,20 +205,52 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         currentDate.setVisibility(View.VISIBLE);
     }
 
-    private void setWeatherConditionsOnViews() {
+//    private void setWeatherConditionsOnViews() {
+//
+//        parseData();
+//
+//        int weatherCode = weather.getWeather().get(0).getId();
+//
+//        weatherCurrentDate.setText(CurrentDateAndTime.getInstance(this).getCurrentDate());
+//        tempMax.setText(Validators.formatDecimal(weather.getMain().getTempMax()) + getTemperaturePrefs());
+//        tempMin.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
+//        weatherWind.setText(Validators.formatDecimal(weather.getWind().getSpeed()));
+//        weatherTitle.setText(weather.getWeather().get(0).getDescription());
+//        weatherIcon.setImageResource(new WeatherIconChooser(weatherCode).getImageResource());
+//
+//
+//
+//    }
 
-        int weatherCode = weather.getWeather().get(0).getId();
+    private void setViews(User user) {
 
-        weatherCurrentDate.setText(CurrentDateAndTime.getInstance(this).getCurrentDate());
-        tempMax.setText(Validators.formatDecimal(weather.getMain().getTempMax()) + getTemperaturePrefs());
-        tempMin.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
-        weatherWind.setText(Validators.formatDecimal(weather.getWind().getSpeed()));
-        weatherTitle.setText(weather.getWeather().get(0).getDescription());
-        weatherIcon.setImageResource(new WeatherIconChooser(weatherCode).getImageResource());
+        weatherCurrentDate.setText(user.getDate());
+        tempMax.setText(Validators.formatDecimal(user.getTemp_max()) + getTemperaturePrefs());
+        tempMin.setText(Validators.formatDecimal(user.getTemp_min()) + getTemperaturePrefs());
+        weatherWind.setText(Validators.formatDecimal(user.getWindSpeed()));
+        weatherTitle.setText(user.getTitle());
+        weatherIcon.setImageResource((int) user.getImage());
 
-        location.setText(UserLocationRequest.getInstance(this).getLocationByGPS());
+        location.setText(user.getAddress().getCompleteAdress());
 
 
+    }
+
+    private void parseData() {
+        com.pcr.myinfoweather.models.Location userLocation = WeatherParse.parseGeoLocation(getGeoLocation());
+        UserAdress userAddress = WeatherParse.parseAddress(getAddress());
+        User user = WeatherParse.parseWeather(this, weather, userLocation, userAddress);
+
+        setViews(user);
+    }
+
+    private ArrayList<Float> getGeoLocation() {
+        return UserLocationRequest.getInstance(this).getGPSLocation();
+    }
+
+    private ArrayList<String> getAddress() {
+        com.pcr.myinfoweather.models.Location userLocation = WeatherParse.parseGeoLocation(getGeoLocation());
+        return UserLocationRequest.getInstance(this).getAddress(userLocation);
     }
 
     private String getTemperaturePrefs() {

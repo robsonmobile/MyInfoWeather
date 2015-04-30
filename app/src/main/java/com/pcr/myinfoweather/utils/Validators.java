@@ -41,4 +41,8 @@ public class Validators {
     public static String formatDecimal(float number) {
         return new DecimalFormat("##.#").format(number);
     }
+
+    public static boolean isNull(String address) {
+        return address == null;
+    }
 }

@@ -189,8 +189,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         //pegar os valores que foram setados através do builder da classe, e colocar em cada item,
         //primeiramente sem distinção de temperatura (F e C), colocar somente em celcius.
 
-        float temp = weather.getTemp();
-        Log.d("temp", "weathertemp: "+ temp);
+        //float temp = weather.getTemp();
+        //Log.d("temp", "weathertemp: "+ temp);
     }
 
     private void notifyValidationError(String errorMessage) {

@@ -1,5 +1,8 @@
 package com.pcr.myinfoweather.models.weather;
 
+import com.pcr.myinfoweather.models.Location;
+import com.pcr.myinfoweather.models.WeatherData;
+
 import java.util.Date;
 
 import se.emilsjolander.sprinkles.Model;
@@ -16,27 +19,45 @@ public class User extends Model {
     @AutoIncrementPrimaryKey
     @Column("id") long id;
     @Column("image") private float image;
+    @Column("title") private String title;
     @Column("temp_min") private float temp_min;
     @Column("temp_max") private float temp_max;
     @Column("windSpeed") private float windSpeed;
-    @Column("date") private Date date;
-    @Column("city") private String city;
-    @Column("adminArea") private String state;
-    @Column("country") private String country;
+    @Column("date") private String date;
+    @Column("weatherCode") private int weatherCode;
+    @Column("address") private UserAdress address;
+    @Column("location") private Location geoLocation;
 
     public User() {
 
     }
 
     private User(Builder builder) {
+        title = builder.title;
         image = builder.image;
         temp_min = builder.temp_min;
         temp_max = builder.temp_max;
         windSpeed = builder.windSpeed;
         date = builder.date;
-        city = builder.city;
-        state = builder.state;
-        country = builder.country;
+        weatherCode = builder.weatherCode;
+        geoLocation = builder.geoLocation;
+        address = builder.address;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getWeatherCode() {
+        return weatherCode;
+    }
+
+    public void setWeatherCode(int weatherCode) {
+        this.weatherCode = weatherCode;
     }
 
     public float getTemp_min() {
@@ -71,36 +92,29 @@ public class User extends Model {
         this.image = image;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public String getCity() {
-        return city;
+    public UserAdress getAddress() {
+        return address;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setAddress(UserAdress address) {
+        this.address = address;
     }
 
-    public String getState() {
-        return state;
+
+    public Location getGeoLocation() {
+        return geoLocation;
     }
 
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
+    public void setGeoLocation(Location geoLocation) {
+        this.geoLocation = geoLocation;
     }
 
     public static Builder newBuilder() {
@@ -108,18 +122,23 @@ public class User extends Model {
     }
 
     public static final class Builder {
+        private String title;
         private int image;
         private float temp_min;
         private float temp_max;
         private float windSpeed;
-        private Date date;
-        private String city;
-        private String state;
-        private String country;
-
+        private String date;
+        private int weatherCode;
+        private Location geoLocation;
+        private UserAdress address;
 
         private Builder() {
 
+        }
+
+        public Builder withTitle(String title) {
+            this.title = title;
+            return this;
         }
 
         public Builder withImage(int image) {
@@ -137,28 +156,28 @@ public class User extends Model {
             return this;
         }
 
-        public Builder withSpeed(float windSpeed) {
+        public Builder withWindSpeed(float windSpeed) {
             this.windSpeed = windSpeed;
             return this;
         }
 
-        public Builder withDate(Date date) {
+        public Builder withDate(String date) {
             this.date = date;
             return this;
         }
 
-        public Builder withCity(String city) {
-            this.city = city;
+        public Builder withAddress(UserAdress address) {
+            this.address = address;
             return this;
         }
 
-        public Builder withState(String state) {
-            this.state = state;
+        public Builder withWeatherCode(int code) {
+            this.weatherCode = code;
             return this;
         }
 
-        public Builder withCountry(String country) {
-            this.country = country;
+        public Builder withGeoLocation(Location geoLocation) {
+            this.geoLocation = geoLocation;
             return this;
         }
 
@@ -167,7 +186,6 @@ public class User extends Model {
         }
 
     }
-
 
 
 }

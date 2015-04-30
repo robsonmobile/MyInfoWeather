@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
  * Created by Paula on 05/12/2014.
  */
 public class CurrentDateAndTime {
+
     private static CurrentDateAndTime ourInstance;
     private Context context;
 

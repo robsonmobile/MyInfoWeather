@@ -61,19 +61,17 @@ public class Constants {
     //DEFAULT 30 MINUTOS
     public static final long PREF_DEFAULT_UPDATE_INTERVAL = 1800000;
 
-    //weather Codes
-    public static final ArrayList WEATHER_THUNDERSTORM_CODE = new ArrayList<Integer>();
+    /***Number of listed occurrences***/
+    public static final int LIST_ONE_RESULT = 1;
 
-    public static final int WEATHER_THUNDERSTORM_MIN = 200;
-    public static final int WEATHER_THUNDERSTORM_MAX = 231;
+    /***Geolocation***/
+    public static final int LATITUDE = 0;
+    public static final int LONGITUDE = 1;
 
-    public static final int WEATHER_SHOWER_RAIN_MIN = 300;
-    public static final int WEATHER_SHOWER_RAIN_MAX = 321;
-
-    public static final int WEATHER_RAIN_MIN = 500;
-    public static final int WEATHER_RAIN_MAX = 504;
-
-
+    /***Address***/
+    public static final int CITY = 0;
+    public static final int STATE = 1;
+    public static final int COUNTRY = 2;
 
 
 }
