@@ -1,14 +1,14 @@
 package com.pcr.myinfoweather.network;
 
 import android.content.Context;
+import android.util.Log;
 
-import com.pcr.myinfoweather.models.Location;
-import com.pcr.myinfoweather.models.WeatherData;
-import com.pcr.myinfoweather.models.weather.User;
-import com.pcr.myinfoweather.models.weather.UserAdress;
+import com.pcr.myinfoweather.models.currentweather.Location;
+import com.pcr.myinfoweather.models.currentweather.WeatherData;
+import com.pcr.myinfoweather.models.user.User;
+import com.pcr.myinfoweather.models.user.UserAdress;
 import com.pcr.myinfoweather.utils.Constants;
 import com.pcr.myinfoweather.utils.CurrentDateAndTime;
-import com.pcr.myinfoweather.utils.Validators;
 import com.pcr.myinfoweather.utils.WeatherIconChooser;
 
 import java.util.ArrayList;
@@ -20,6 +20,10 @@ public class WeatherParse {
 
     public static User parseWeather(Context context, WeatherData weather, Location userLocation, UserAdress userAddress) {
         if(weather != null) {
+            //log
+            Log.i("image weathercode", "> " + weather.getWeather().get(0).getId());
+            Log.i("image weatherimage", "> " + new WeatherIconChooser(weather.getWeather().get(0).getId()).getImageResource());
+
             return User.newBuilder()
                     .withWeatherCode(weather.getWeather().get(0).getId())
                     .withTitle(weather.getWeather().get(0).getDescription())
@@ -31,6 +35,8 @@ public class WeatherParse {
                     .withGeoLocation(userLocation)
                     .withAddress(userAddress)
                     .build();
+
+
 
         }
 

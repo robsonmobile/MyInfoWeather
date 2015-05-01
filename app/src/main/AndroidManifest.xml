@@ -18,6 +18,13 @@
         android:theme="@style/AppTheme"
         android:name=".WeatherApplication">
 
+        <receiver android:name=".providers.AppWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/appwidgetproviderinfo" />
+        </receiver>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

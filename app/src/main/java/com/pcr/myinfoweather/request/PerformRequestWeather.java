@@ -1,6 +1,6 @@
 package com.pcr.myinfoweather.request;
 
-import com.pcr.myinfoweather.models.LocationData;
+import com.pcr.myinfoweather.models.currentweather.LocationData;
 import com.pcr.myinfoweather.response.WeatherHttpResponseHandler;
 import com.pcr.myinfoweather.utils.Constants;
 

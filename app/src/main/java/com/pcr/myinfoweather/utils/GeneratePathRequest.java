@@ -4,7 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.pcr.myinfoweather.R;
-import com.pcr.myinfoweather.models.LocationData;
+import com.pcr.myinfoweather.models.currentweather.LocationData;
 import com.pcr.myinfoweather.request.UserLocationRequest;
 
 import java.net.URI;

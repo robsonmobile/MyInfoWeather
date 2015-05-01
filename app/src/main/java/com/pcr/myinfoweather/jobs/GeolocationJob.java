@@ -7,9 +7,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.path.android.jobqueue.Job;
-import com.path.android.jobqueue.JobStatus;
 import com.path.android.jobqueue.Params;
-import com.pcr.myinfoweather.models.UserLocation;
+import com.pcr.myinfoweather.models.currentweather.UserLocation;
 
 /**
  * Created by Paula on 07/03/2015.

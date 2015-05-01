@@ -10,7 +10,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
-import com.pcr.myinfoweather.models.LocationData;
+import com.pcr.myinfoweather.models.currentweather.LocationData;
 import com.pcr.myinfoweather.utils.Constants;
 
 import java.io.IOException;
@@ -112,7 +112,7 @@ public class UserLocationRequest implements  GoogleApiClient.OnConnectionFailedL
         return geoData;
     }
 
-    public ArrayList<String> getAddress(com.pcr.myinfoweather.models.Location gpsData) {
+    public ArrayList<String> getAddress(com.pcr.myinfoweather.models.currentweather.Location gpsData) {
         ArrayList<String> address = new ArrayList<String>();
 
         Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());

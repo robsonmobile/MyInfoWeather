@@ -2,7 +2,7 @@ package com.pcr.myinfoweather.db;
 
 import android.content.Context;
 
-import com.pcr.myinfoweather.models.UserLocation;
+import com.pcr.myinfoweather.models.currentweather.UserLocation;
 
 import se.emilsjolander.sprinkles.Migration;
 import se.emilsjolander.sprinkles.Sprinkles;

@@ -1,6 +1,8 @@
 package com.pcr.myinfoweather.utils;
 
 
+import android.util.Log;
+
 import com.pcr.myinfoweather.R;
 import java.util.Calendar;
 
@@ -62,6 +64,7 @@ public class WeatherIconChooser {
         }else if(isScatteredCloudsWeather()) {
             return R.drawable.wc_scattered_clouds;
         } else if(isBrokenCloudsWeather()) {
+            Log.i("image int number", "> " + R.drawable.wc_broken_clouds);
             return R.drawable.wc_broken_clouds;
         } else if(isMistWeather()) {
             return R.drawable.wc_mist;

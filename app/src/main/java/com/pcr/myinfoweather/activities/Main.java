@@ -1,8 +1,8 @@
 package com.pcr.myinfoweather.activities;
 
-import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -15,20 +15,16 @@ import com.google.android.gms.location.LocationServices;
 import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.R;
 import com.pcr.myinfoweather.helpers.ConnectivityHelpers;
-import com.pcr.myinfoweather.models.LocationData;
-import com.pcr.myinfoweather.models.UserLocation;
-import com.pcr.myinfoweather.models.WeatherData;
-import com.pcr.myinfoweather.models.weather.User;
-import com.pcr.myinfoweather.models.weather.UserAdress;
+import com.pcr.myinfoweather.models.currentweather.LocationData;
+import com.pcr.myinfoweather.models.currentweather.WeatherData;
+import com.pcr.myinfoweather.models.user.User;
+import com.pcr.myinfoweather.models.user.UserAdress;
 import com.pcr.myinfoweather.network.APIClient;
-import com.pcr.myinfoweather.network.JsonParsers;
 import com.pcr.myinfoweather.network.WeatherParse;
 import com.pcr.myinfoweather.request.UserLocationRequest;
-import com.pcr.myinfoweather.utils.CurrentDateAndTime;
 import com.pcr.myinfoweather.utils.Intents;
 import com.pcr.myinfoweather.utils.UserSessionManager;
 import com.pcr.myinfoweather.utils.Validators;
-import com.pcr.myinfoweather.utils.WeatherIconChooser;
 
 import java.util.ArrayList;
 
@@ -117,7 +113,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
 //            getLocationData();
 //        }
 
-        UserLocationRequest.getInstance(this).connectClient();
+        //UserLocationRequest.getInstance(this).connectClient();
     }
 
     @Override
@@ -153,6 +149,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
 
             @Override
             public void failure(RetrofitError error) {
+                //fazer exception para erro// dispara mensagem ou dialog
             //call placeholder
                 stopLoading();
                 Toast.makeText(Main.this, "failure call on callback", Toast.LENGTH_LONG).show();
@@ -225,19 +222,30 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     private void setViews(User user) {
 
         weatherCurrentDate.setText(user.getDate());
-        tempMax.setText(Validators.formatDecimal(user.getTemp_max()) + getTemperaturePrefs());
-        tempMin.setText(Validators.formatDecimal(user.getTemp_min()) + getTemperaturePrefs());
-        weatherWind.setText(Validators.formatDecimal(user.getWindSpeed()));
+        tempMax.setText(getMaxTemperature(user));
+        tempMin.setText(getMinTemperature(user));
+        weatherWind.setText(getWindSpeed(user));
         weatherTitle.setText(user.getTitle());
-        weatherIcon.setImageResource((int) user.getImage());
-
+        weatherIcon.setImageResource(user.getImage());
         location.setText(user.getAddress().getCompleteAdress());
 
 
     }
 
+    private String getWindSpeed(User user) {
+        return Validators.formatDecimal(user.getWindSpeed());
+    }
+
+    private String getMinTemperature(User user) {
+        return Validators.formatDecimal(user.getTemp_min()) + getTemperaturePrefs();
+    }
+
+    private String getMaxTemperature(User user) {
+        return Validators.formatDecimal(user.getTemp_max()) + getTemperaturePrefs();
+    }
+
     private void parseData() {
-        com.pcr.myinfoweather.models.Location userLocation = WeatherParse.parseGeoLocation(getGeoLocation());
+        com.pcr.myinfoweather.models.currentweather.Location userLocation = WeatherParse.parseGeoLocation(getGeoLocation());
         UserAdress userAddress = WeatherParse.parseAddress(getAddress());
         User user = WeatherParse.parseWeather(this, weather, userLocation, userAddress);
 
@@ -249,7 +257,7 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     }
 
     private ArrayList<String> getAddress() {
-        com.pcr.myinfoweather.models.Location userLocation = WeatherParse.parseGeoLocation(getGeoLocation());
+        com.pcr.myinfoweather.models.currentweather.Location userLocation = WeatherParse.parseGeoLocation(getGeoLocation());
         return UserLocationRequest.getInstance(this).getAddress(userLocation);
     }
 
