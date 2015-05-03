@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import com.pcr.myinfoweather.R;
 import com.pcr.myinfoweather.models.currentweather.LocationData;
-import com.pcr.myinfoweather.request.UserLocationRequest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -41,7 +40,7 @@ public class GeneratePathRequest {
                 break;
             case Constants.PATH_FOR_CITY:
                 path = cityLocationPath(textFieldCity, tempPreference);
-                UserLocationRequest.getInstance(mContext).getCityLocation(removeSpaceString(textFieldCity));
+          //      UserLocationRequest.getInstance(mContext).getCityLocation(removeSpaceString(textFieldCity));
                 System.out.println("log path: " + path);
                 break;
         }

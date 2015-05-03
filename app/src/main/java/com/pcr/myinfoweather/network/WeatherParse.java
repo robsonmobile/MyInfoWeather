@@ -43,11 +43,11 @@ public class WeatherParse {
         return null;
     }
 
-    public static Location parseGeoLocation(ArrayList<Float> geoLocation) {
+    public static Location parseGeoLocation(android.location.Location geoLocation) {
         if(geoLocation != null) {
             return Location.newBuilder()
-                    .withLatitude(geoLocation.get(Constants.LATITUDE))
-                    .withLongitude(geoLocation.get(Constants.LONGITUDE))
+                    .withLatitude(geoLocation.getLatitude())
+                    .withLongitude(geoLocation.getLongitude())
                     .build();
         }
 

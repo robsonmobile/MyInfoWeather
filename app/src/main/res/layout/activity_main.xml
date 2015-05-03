@@ -14,88 +14,88 @@
         android:id="@+id/frameToolbar"
         >
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/my_awesome_toolbar"
-        android:layout_height="120dp"
-        android:layout_width="match_parent"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/primary"
-        app:theme="@style/ToolBarStyle"
-        android:subtitle="Test this app">
-
-        <LinearLayout
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/my_awesome_toolbar"
+            android:layout_height="120dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="MyInfoWeather"
-                android:textSize="20sp"
-                android:textColor="@android:color/white"
-                android:layout_weight="1"/>
-
+            android:minHeight="?attr/actionBarSize"
+            android:background="@color/primary"
+            app:theme="@style/ToolBarStyle"
+            android:subtitle="Test this app">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1"
-                >
-
-                <ProgressBar
-                    android:layout_width="65dp"
-                    android:layout_height="20dp"
-                    android:id="@+id/loadingLocation"
-                    android:layout_gravity="center"
-                    android:visibility="visible"/>
-
-
+                android:layout_height="match_parent"
+                android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="18sp"
-                    android:layout_gravity="left"
-                    android:textStyle="italic"
-                    android:id="@+id/weatherLocationText"
+                    android:layout_marginTop="10dp"
+                    android:text="MyInfoWeather"
+                    android:textSize="20sp"
                     android:textColor="@android:color/white"
-                    android:lines="1"/>
+                    android:layout_weight="1"/>
 
-            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            >
-
-            <ProgressBar
-                android:layout_width="65dp"
-                android:layout_height="20dp"
-                android:id="@+id/loadingCurrentDate"
-                android:layout_gravity="center"
-                android:visibility="visible"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="14 de novembro de 2014"
-                    android:textSize="18sp"
-                    android:layout_gravity="left"
-                    android:layout_marginBottom="5dp"
-                    android:textStyle="italic"
-                    android:id="@+id/weatherCurrentDate"
-                    android:textColor="@android:color/white"
+                    android:orientation="horizontal"
                     android:layout_weight="1"
-                    android:visibility="gone"/>
+                    >
 
+                    <ProgressBar
+                        android:layout_width="65dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/loadingLocation"
+                        android:layout_gravity="center"
+                        android:visibility="visible"/>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="18sp"
+                        android:layout_gravity="left"
+                        android:textStyle="italic"
+                        android:id="@+id/weatherLocationText"
+                        android:textColor="@android:color/white"
+                        android:lines="1"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    >
+
+                    <ProgressBar
+                        android:layout_width="65dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/loadingCurrentDate"
+                        android:layout_gravity="center"
+                        android:visibility="visible"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="14 de novembro de 2014"
+                        android:textSize="18sp"
+                        android:layout_gravity="left"
+                        android:layout_marginBottom="5dp"
+                        android:textStyle="italic"
+                        android:id="@+id/weatherCurrentDate"
+                        android:textColor="@android:color/white"
+                        android:layout_weight="1"
+                        android:visibility="gone"/>
+
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-    </android.support.v7.widget.Toolbar>
+        </android.support.v7.widget.Toolbar>
 
         <com.getbase.floatingactionbutton.FloatingActionsMenu
             android:id="@+id/fab"
@@ -111,29 +111,31 @@
 
             >
 
-            </com.getbase.floatingactionbutton.FloatingActionsMenu>
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:id="@+id/scrollViewWeather"
-        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:id="@+id/scrollViewWeather"
+            >
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="10dp"
-                        >
+                <LinearLayout
+                    android:id="@+id/weatherContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="10dp"
+                    >
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -167,91 +169,91 @@
                             android:id="@+id/weatherTitle"
                             android:lines="4"/>
 
-                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+
+                        android:layout_marginTop="30dp"
+
+                        android:layout_gravity="left"
+                        >
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"
-
-                            android:layout_marginTop="30dp"
-
-                            android:layout_gravity="left"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="30dp"
+                            android:layout_marginTop="15dp"
+                            android:orientation="horizontal"
+                            android:gravity="left"
                             >
 
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="30dp"
-                                android:layout_marginTop="15dp"
                                 android:orientation="horizontal"
-                                android:gravity="left"
                                 >
 
-                                <LinearLayout
+
+                                <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    >
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/thermometer_icon"/>
 
+                                <ProgressBar
+                                    android:layout_width="65dp"
+                                    android:layout_height="20dp"
+                                    android:id="@+id/loadingMinTemp"
+                                    android:layout_gravity="center"
+                                    android:visibility="gone"/>
 
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:src="@drawable/thermometer_icon"/>
-
-                                    <ProgressBar
-                                        android:layout_width="65dp"
-                                        android:layout_height="20dp"
-                                        android:id="@+id/loadingMinTemp"
-                                        android:layout_gravity="center"
-                                        android:visibility="gone"/>
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:text="@string/weather_max_temp"
-                                        android:textSize="18sp"
-                                        android:id="@+id/weatherTempMax"/>
-
-
-
-
-                                </LinearLayout>
-
-                                <LinearLayout
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:text="@string/weather_max_temp"
+                                    android:textSize="18sp"
+                                    android:id="@+id/weatherTempMax"/>
+
+
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:orientation="horizontal"
+                                >
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:id="@+id/weatherMaxTempIcon"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/thermometer_min_icon"/>
+
+                                <ProgressBar
+                                    android:layout_width="65dp"
+                                    android:layout_height="20dp"
+                                    android:id="@+id/loadingMaxTemp"
+                                    android:layout_gravity="center"
+                                    android:visibility="gone"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
                                     android:layout_marginLeft="5dp"
-                                    android:orientation="horizontal"
-                                    >
+                                    android:text="@string/weather_temp"
+                                    android:textSize="18sp"
+                                    android:id="@+id/weatherTempMin"/>
 
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:id="@+id/weatherMaxTempIcon"
-                                        android:layout_gravity="center"
-                                        android:src="@drawable/thermometer_min_icon"/>
-
-                                    <ProgressBar
-                                        android:layout_width="65dp"
-                                        android:layout_height="20dp"
-                                        android:id="@+id/loadingMaxTemp"
-                                        android:layout_gravity="center"
-                                        android:visibility="gone"/>
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:layout_marginLeft="5dp"
-                                        android:text="@string/weather_temp"
-                                        android:textSize="18sp"
-                                        android:id="@+id/weatherTempMin"/>
-
-                                </LinearLayout>
+                            </LinearLayout>
 
 
 
@@ -292,7 +294,7 @@
                         </LinearLayout>
 
 
-                        </LinearLayout>
+                    </LinearLayout>
 
 
                 </LinearLayout>
@@ -368,7 +370,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:hint="@string/weather_city_edit_text_hint"
-                                android:id="@+id/cityField"
+                                android:id="@+id/searchAddressField"
                                 />
 
                             <Button
@@ -376,7 +378,8 @@
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/btn_border"
                                 android:text="@string/btn_search_city"
-                                android:id="@+id/btnSearchCity"/>
+                                android:id="@+id/searchAddressButton"
+                                />
                         </LinearLayout>
                     </android.support.v7.widget.CardView>
 
@@ -389,8 +392,8 @@
 
             </LinearLayout>
 
-    </ScrollView>
+        </ScrollView>
 
-</RelativeLayout>
+    </RelativeLayout>
 
 </LinearLayout>

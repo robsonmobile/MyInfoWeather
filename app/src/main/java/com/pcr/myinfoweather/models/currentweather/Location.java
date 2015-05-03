@@ -12,8 +12,8 @@ public class Location {
 
     @AutoIncrementPrimaryKey
     @Column("id") long id;
-    @Column("latitude") float latitude;
-    @Column("longitude") float longitude;
+    @Column("latitude") double latitude;
+    @Column("longitude") double longitude;
 
     public Location() {
 
@@ -24,19 +24,19 @@ public class Location {
         this.longitude = builder.longitude;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(float latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(float longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
@@ -46,19 +46,19 @@ public class Location {
 
     public static final class Builder {
 
-        private float latitude;
-        private float longitude;
+        private double latitude;
+        private double longitude;
 
         private Builder() {
 
         }
 
-        public Builder withLatitude(float latitude) {
+        public Builder withLatitude(double latitude) {
             this.latitude = latitude;
             return this;
         }
 
-        public Builder withLongitude(float longitude) {
+        public Builder withLongitude(double longitude) {
             this.longitude = longitude;
             return this;
         }

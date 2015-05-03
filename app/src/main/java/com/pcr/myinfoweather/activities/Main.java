@@ -2,26 +2,25 @@ package com.pcr.myinfoweather.activities;
 
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.FusedLocationProviderApi;
-import com.google.android.gms.location.LocationServices;
 import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.R;
+
 import com.pcr.myinfoweather.helpers.ConnectivityHelpers;
-import com.pcr.myinfoweather.models.currentweather.LocationData;
 import com.pcr.myinfoweather.models.currentweather.WeatherData;
 import com.pcr.myinfoweather.models.user.User;
 import com.pcr.myinfoweather.models.user.UserAdress;
 import com.pcr.myinfoweather.network.APIClient;
+import com.pcr.myinfoweather.network.GoogleClient;
 import com.pcr.myinfoweather.network.WeatherParse;
-import com.pcr.myinfoweather.request.UserLocationRequest;
+import com.pcr.myinfoweather.request.UserLocation;
+import com.pcr.myinfoweather.utils.Constants;
 import com.pcr.myinfoweather.utils.Intents;
 import com.pcr.myinfoweather.utils.UserSessionManager;
 import com.pcr.myinfoweather.utils.Validators;
@@ -29,6 +28,7 @@ import com.pcr.myinfoweather.utils.Validators;
 import java.util.ArrayList;
 
 import butterknife.InjectView;
+import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -36,14 +36,9 @@ import retrofit.client.Response;
 /**
  * Created by Paula Rosa on 04/03/2015.
  */
-public class Main extends BaseActivity implements UserLocationRequest.IListenerLocation {
+public class Main extends BaseActivity implements GoogleClient.IListenerLocation, View.OnFocusChangeListener {
 
-
-    private boolean isFinishedLocationRequest;
     private Bundle params;
-    private GoogleApiClient mClient;
-    private FusedLocationProviderApi fusedLocationProviderApi = LocationServices.FusedLocationApi;
-    private Location mCurrentLocation;
     private Callback<String> callback;
     private WeatherData weather;
 
@@ -66,6 +61,13 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     @InjectView(R.id.weatherIcon) ImageView weatherIcon;
     @InjectView(R.id.weatherWind) TextView weatherWind;
     @InjectView(R.id.weatherCurrentDate) TextView weatherCurrentDate;
+    @InjectView(R.id.weatherContainer) LinearLayout weatherContainerLayout;
+
+    // -----------------------------------------------------------------------------------
+    // Search Views
+    // -----------------------------------------------------------------------------------
+    @InjectView(R.id.searchAddressField) EditText searchAddressField;
+    @InjectView(R.id.searchAddressButton) Button searchAddressButton;
 
     // -----------------------------------------------------------------------------------
     // TabBar Views
@@ -87,15 +89,21 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        UserLocationRequest.getInstance(this).setListener(this);
+
+        searchAddressField.setOnFocusChangeListener(this);
+
+        GoogleClient.getInstance().setListener(this);
+        GoogleClient.getInstance().getGoogleApiClient(this);
+
         params = new Bundle();
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         configureWeatherCallbackByLocation();
-        UserLocationRequest.getInstance(this).connectClient();
+        GoogleClient.getInstance().connectClient();
     }
 
     @Override
@@ -109,28 +117,46 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
             Intents.toPlaceholder(this);
             //show place holder
         }
-//        if(UserLocationRequest.getInstance(this).isConnected()) {
-//            getLocationData();
-//        }
-
-        //UserLocationRequest.getInstance(this).connectClient();
     }
 
     @Override
     protected void onStop() {
-        UserLocationRequest.getInstance(this).disconnectClient();
+        GoogleClient.getInstance().disconnectClient();
         callback = null;
         super.onStop();
     }
 
-    private void getLocationData() {
+    @Override
+    public void onBackPressed() {
+        if(weatherContainerLayout.getVisibility() == View.GONE) {
+            weatherContainerLayout.setVisibility(View.VISIBLE);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
-        float lat = LocationData.getInstance().getLat();
-        float lon = LocationData.getInstance().getLon();
+    @OnClick(R.id.searchAddressButton) void searchAddress() {
 
-        String unitType = UserSessionManager.getUnitTypePref(this);
 
-        new APIClient().getWeatherByGPS().createWith(lat, lon, unitType, callback);
+    }
+
+    private String getTypedAddress() {
+        return searchAddressField.getText().toString();
+    }
+
+    private java.util.List<android.location.Address> performAddressesList() {
+        return UserLocation.getInstance(this).getAddress(getTypedAddress(), Constants.NUMBER_OF_OCCURRENCES);
+    }
+
+    private String getUserPreferences() {
+        return UserSessionManager.getUnitTypePref(this);
+    }
+
+    private void performRequestByLocation() {
+        double lat = UserLocation.getInstance(this).getGPSInformation().getLatitude();
+        double lon = UserLocation.getInstance(this).getGPSInformation().getLongitude();
+
+        new APIClient().getWeatherByGPS().createWith(lat, lon, getUserPreferences(), callback);
         System.out.println("log weatherAPIClient: " + weather);
     }
 
@@ -159,9 +185,9 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
     }
 
     @Override
-    public void onFinishedLocationRequest(boolean isFinishedRequest) {
+    public void onGoogleClientConnected(boolean isFinishedRequest) {
         if(isFinishedRequest) {
-            getLocationData();
+            performRequestByLocation();
         }
     }
 
@@ -202,23 +228,6 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         currentDate.setVisibility(View.VISIBLE);
     }
 
-//    private void setWeatherConditionsOnViews() {
-//
-//        parseData();
-//
-//        int weatherCode = weather.getWeather().get(0).getId();
-//
-//        weatherCurrentDate.setText(CurrentDateAndTime.getInstance(this).getCurrentDate());
-//        tempMax.setText(Validators.formatDecimal(weather.getMain().getTempMax()) + getTemperaturePrefs());
-//        tempMin.setText(Validators.formatDecimal(weather.getMain().getTempMin()) + getTemperaturePrefs());
-//        weatherWind.setText(Validators.formatDecimal(weather.getWind().getSpeed()));
-//        weatherTitle.setText(weather.getWeather().get(0).getDescription());
-//        weatherIcon.setImageResource(new WeatherIconChooser(weatherCode).getImageResource());
-//
-//
-//
-//    }
-
     private void setViews(User user) {
 
         weatherCurrentDate.setText(user.getDate());
@@ -252,13 +261,13 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
         setViews(user);
     }
 
-    private ArrayList<Float> getGeoLocation() {
-        return UserLocationRequest.getInstance(this).getGPSLocation();
+    private Location getGeoLocation() {
+        return UserLocation.getInstance(this).getGPSInformation();
     }
 
     private ArrayList<String> getAddress() {
         com.pcr.myinfoweather.models.currentweather.Location userLocation = WeatherParse.parseGeoLocation(getGeoLocation());
-        return UserLocationRequest.getInstance(this).getAddress(userLocation);
+        return UserLocation.getInstance(this).getAddress(userLocation);
     }
 
     private String getTemperaturePrefs() {
@@ -270,4 +279,11 @@ public class Main extends BaseActivity implements UserLocationRequest.IListenerL
 
     }
 
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+
+        if(v.getId() == R.id.searchAddressField && hasFocus) {
+            weatherContainerLayout.setVisibility(View.GONE);
+        }
+    }
 }

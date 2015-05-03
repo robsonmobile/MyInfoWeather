@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.wake_lock"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
 
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/info_weather_icon"
@@ -28,7 +29,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBFIxWrARAlbodwPTab9zAWO9MC3Vmsm08"/>
+            android:value="AIzaSyBT5hV4nfrN3sXz4P3Wa9Qm0_whIP7lB3k"/>
 
 
 

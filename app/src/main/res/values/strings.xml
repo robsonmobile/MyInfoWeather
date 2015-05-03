@@ -28,5 +28,6 @@
     <string name="message_close">Close</string>
     <string name="analog_name">analog</string>
     <string name="unavailable_location">"Unavailable location"</string>
+    <string name="place_details">place details</string>
 
 </resources>

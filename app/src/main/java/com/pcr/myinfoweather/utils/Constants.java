@@ -62,7 +62,7 @@ public class Constants {
     public static final long PREF_DEFAULT_UPDATE_INTERVAL = 1800000;
 
     /***Number of listed occurrences***/
-    public static final int LIST_ONE_RESULT = 1;
+    public static final int NUMBER_OF_OCCURRENCES = 20;
 
     /***Geolocation***/
     public static final int LATITUDE = 0;
