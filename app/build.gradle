@@ -19,7 +19,7 @@ android {
             keyPassword "android"
         }
         release {
-            storePassword "weatherpass"
+            storePassword "keystorepass"
             keyAlias 'weather'
             keyPassword "weatherpass"
             storeFile file('D:/Development/Android/Apps/keystores/keytore.jks')

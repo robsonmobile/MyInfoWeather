@@ -59,18 +59,25 @@ public class UserAdress {
         String country = "";
         if(!isNullAddress(getCity())) {
             city = getCity();
+        } else {
+            city = "";
         }
         if(!isNullAddress(getState())) {
             state = getState();
+        } else {
+            state = "";
         }
         if(!isNullAddress(getCountry())) {
             country = getCountry();
+        } else {
+            country = "";
         }
         if(Validators.isNull(getCity()) && Validators.isNull(getState()) &&
                 Validators.isNull(getCountry())) {
             completeAddress = "Unavailable address";
+        } else {
+            completeAddress = city + ", " + state + " - " + country;
         }
-        completeAddress = city + ", " + state + " - " + country;
         return completeAddress;
     }
 
