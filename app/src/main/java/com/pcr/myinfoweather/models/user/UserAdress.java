@@ -1,5 +1,7 @@
 package com.pcr.myinfoweather.models.user;
 
+import com.pcr.myinfoweather.utils.Validators;
+
 import se.emilsjolander.sprinkles.annotations.AutoIncrementPrimaryKey;
 import se.emilsjolander.sprinkles.annotations.Column;
 
@@ -51,9 +53,26 @@ public class UserAdress {
         this.country = country;
     }
 
-    public String getCompleteAdress() {
-        completeAddress = getCity() + ", " + getState() + " - " + getCountry();
+    public String getCompleteAddress() {
+        String city = "";
+        String state = "";
+        String country = "";
+        if(!isNullAddress(getCity())) {
+            city = getCity();
+        }
+        if(!isNullAddress(getState())) {
+            state = getState();
+        }
+        if(!isNullAddress(getCountry())) {
+            country = getCountry();
+        }
+
+        completeAddress = city + ", " + state + " - " + country;
         return completeAddress;
+    }
+
+    private boolean isNullAddress(String address) {
+        return Validators.isNull(address);
     }
 
     public void setCompleteAdress(String completeAdress) {

@@ -15,13 +15,14 @@
         >
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/my_awesome_toolbar"
+            android:id="@+id/toolbar"
             android:layout_height="120dp"
             android:layout_width="match_parent"
             android:minHeight="?attr/actionBarSize"
             android:background="@color/primary"
             app:theme="@style/ToolBarStyle"
-            android:subtitle="Test this app">
+            android:subtitle="Test this app"
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -156,7 +157,8 @@
                             android:layout_height="90dp"
                             android:layout_gravity="center"
                             android:id="@+id/weatherIcon"
-                            android:src="@drawable/wc_shower_rain"/>
+                            android:src="@drawable/wc_shower_rain"
+                            android:visibility="gone"/>
 
                         <TextView
                             android:layout_width="match_parent"
@@ -167,7 +169,8 @@
                             android:textSize="18sp"
                             android:layout_marginBottom="10dp"
                             android:id="@+id/weatherTitle"
-                            android:lines="4"/>
+                            android:lines="4"
+                            android:visibility="gone"/>
 
                     </LinearLayout>
 
@@ -216,7 +219,8 @@
                                     android:layout_gravity="center"
                                     android:text="@string/weather_max_temp"
                                     android:textSize="18sp"
-                                    android:id="@+id/weatherTempMax"/>
+                                    android:id="@+id/weatherTempMax"
+                                    android:visibility="gone"/>
 
 
 
@@ -251,7 +255,8 @@
                                     android:layout_marginLeft="5dp"
                                     android:text="@string/weather_temp"
                                     android:textSize="18sp"
-                                    android:id="@+id/weatherTempMin"/>
+                                    android:id="@+id/weatherTempMin"
+                                    android:visibility="gone"/>
 
                             </LinearLayout>
 
@@ -363,6 +368,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:visibility="invisible"
                             >
 
                             <EditText

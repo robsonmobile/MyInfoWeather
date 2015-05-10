@@ -45,4 +45,10 @@ public class Validators {
     public static boolean isNull(String address) {
         return address == null;
     }
+
+    public static String removeAccents(String valueToFormat) {
+        valueToFormat = Normalizer.normalize(valueToFormat, Normalizer.Form.NFD);
+        valueToFormat = valueToFormat.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return valueToFormat;
+    }
 }

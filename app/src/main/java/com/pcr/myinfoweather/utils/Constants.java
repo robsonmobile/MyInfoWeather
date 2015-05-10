@@ -22,8 +22,8 @@ public class Constants {
     public static final String UNITS_PATH = "&units=";
 
     /***Convert Temperature Constants***/
-    public static final int TEMP_CELSIUS = 0;
-    public static final int TEMP_FAHRENHEIT = 1;
+    public static final String UNIT_TYPE_CELSIUS = "C";
+    public static final String UNIT_TYPE_FAHRENHEIT = "F";
 
     /***Temperature Constants***/
     public static final String CELSIUS_TEMP = "metric";
@@ -72,6 +72,8 @@ public class Constants {
     public static final int CITY = 0;
     public static final int STATE = 1;
     public static final int COUNTRY = 2;
+
+    public static final String ADDRESS_NOT_FOUND = "Address not found";
 
 
 }

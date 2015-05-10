@@ -19,7 +19,7 @@ public class UserSessionManager {
     }
 
     public static String getSavedTemperaturePref(Context context) {
-        return appPrefs(context).getString(UNIT_PREF, "");
+        return appPrefs(context).getString(UNIT_PREF, "C");
     }
 
     public static boolean hasTemperaturePref(Context context) {
@@ -27,12 +27,12 @@ public class UserSessionManager {
     }
 
     public static String getUnitTypePref(Context context) {
-        if(getSavedTemperaturePref(context).equalsIgnoreCase("C")) {
-            return "metric";
-        } else if(getSavedTemperaturePref(context).equalsIgnoreCase("F")) {
-            return "imperial";
+        if(getSavedTemperaturePref(context).equals(Constants.UNIT_TYPE_CELSIUS)) {
+            return Constants.CELSIUS_TEMP;
+        } else if(getSavedTemperaturePref(context).equals(Constants.UNIT_TYPE_FAHRENHEIT)) {
+            return Constants.FAHRENHEIT_TEMP;
         } else {
-            return "metric";
+            return Constants.CELSIUS_TEMP;
         }
     }
 

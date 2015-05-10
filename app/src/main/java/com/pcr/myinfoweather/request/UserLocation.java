@@ -4,16 +4,20 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.util.Log;
+import android.util.Pair;
 
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.pcr.myinfoweather.network.GoogleClient;
+import com.pcr.myinfoweather.utils.Constants;
+import com.pcr.myinfoweather.utils.Validators;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by Paula on 04/12/2014.
@@ -53,24 +57,19 @@ public class UserLocation {
         return lastLocation;
     }
 
-    public LatLngBounds getLatLngBounds() {
-        double lat = getGPSInformation().getLatitude();
-        double lon = getGPSInformation().getLongitude();
-        return new LatLngBounds(new LatLng(lat, lon), new LatLng(lat, lon));
-    }
-
     public ArrayList<String> getAddress(com.pcr.myinfoweather.models.currentweather.Location gpsData) {
-        ArrayList<String> address = new ArrayList<String>();
-        Geocoder geocoder = getGeocoder();
+        ArrayList<String> address = new ArrayList<>();
 
-        int occurrences = 1;
-        int occurrencesPosition = occurrences -1;
+        int occurrencesNumber = 1;
+        int occurrencesPosition = occurrencesNumber -1;
         try {
             List<Address> listLocation = getGeocoder().getFromLocation(gpsData.getLatitude(), gpsData.getLongitude(),
-                    occurrences);
+                    occurrencesNumber);
 
-            if (listLocation != null && listLocation.size() > 0) {
-                Address addresses = listLocation.get(occurrencesPosition);
+            Address addresses = null;
+
+            if (listLocation != null && listLocation.size() == 1) {
+                addresses = listLocation.get(occurrencesPosition);
 
                 address.add(addresses.getSubAdminArea());
                 address.add(addresses.getAdminArea());
@@ -87,23 +86,59 @@ public class UserLocation {
         return null;
     }
 
-    private Geocoder getGeocoder() {//metodo para listar 20 ocorrencias de cidades
+    private Geocoder getGeocoder() {
         return new Geocoder(mContext, Locale.getDefault());
     }
 
-    public List<Address> getAddress(String typedAddress, int occurences) {
-        List<Address> listLocation = null;
+    public ArrayList<String> getAddress(String typedAddress) {
+        typedAddress = "sao car";
+        typedAddress = Validators.removeAccents(typedAddress);
+
+        ArrayList<String> address = new ArrayList<>();
+        int occurrencesNumber = 20;
 
         try {
-            listLocation = getGeocoder().getFromLocationName(typedAddress, occurences);
+            List<Address> listLocation = getGeocoder().getFromLocationName(typedAddress,
+                    occurrencesNumber);
 
+            Address addresses = null;
+            Map<Integer, ArrayList<String>> completeAdress = new HashMap<>();
+            ArrayList<Pair<Integer, ArrayList<String>>> complete = new ArrayList<>();
+
+            if(listLocation.size() == 0) {
+                //erro - generate a toast or message for user
+                address.add(Constants.ADDRESS_NOT_FOUND);
+            }
+            if (listLocation != null && listLocation.size() > 0) {
+                for (int i = 0; i < listLocation.size(); i++) {
+                    if(address.size() != 0) {
+                        address.clear();
+                    }
+
+                    addresses = listLocation.get(i);
+
+                    address.add(addresses.getSubAdminArea());
+                    address.add(addresses.getAdminArea());
+                    address.add(addresses.getCountryCode());
+                    Log.i("Log Address", "--> " + address);
+
+                    completeAdress.put(i, address);
+
+                }
+
+                Log.i("Log Address final", "--> " + completeAdress);
+                return address;
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
+            address.add("Unavailable location");
+            return address;
         }
 
-        return listLocation;
-    }
+        return null;
 
+    }
 }
 
 

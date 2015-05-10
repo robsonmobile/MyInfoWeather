@@ -29,5 +29,8 @@
     <string name="analog_name">analog</string>
     <string name="unavailable_location">"Unavailable location"</string>
     <string name="place_details">place details</string>
+    <string name="notification_preference_title">Notification Interval</string>
+    <string name="notification_preference_dialog_title">Select an interval</string>
+    <string name="notification_preference_default_value">default</string>
 
 </resources>

@@ -2,20 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="titulo da categoria"
-        android:key="pref_key_category">
-
-        <Preference
-            android:key="temperaturePref"
-            android:title="@string/temperature_unit"
-            android:summary="pref"
-            />
-
-        <Preference
-            android:key="updateInterval"
-            android:title="@string/update_interval"
-            android:summary=""
-            />
+        android:title="Temperature Unit"
+        android:key="pref_key_temperature">
 
         <CheckBoxPreference
             android:key="temp_celsius"
@@ -33,5 +21,36 @@
 
     </PreferenceCategory>
 
+    <!-- add later
+    <PreferenceCategory
+        android:title="Notifications"
+        android:key="pref_key_notifications">
+
+        <ListPreference
+            android:key="notifications_pref"
+            android:title="@string/notification_preference_title"
+            android:dialogTitle="@string/notification_preference_dialog_title"
+            android:entries="@array/notification_preference_entries"
+            android:entryValues="@array/notification_preference_entries_values"
+            android:defaultValue="@string/notification_preference_default_value"
+            android:summary="Select an interval to receive notification"/>
+
+        <CheckBoxPreference
+            android:key="notification_with_alarm_rings"
+            android:title="Alarm clock time"
+            android:summary="Send notification when alarm clock rings"
+            android:defaultValue="false"
+            />
+
+        <EditTextPreference
+            android:key="notification_with_lunch_time"
+            android:title="Lunch time"
+            android:summary="Send notification when going to lunch"
+            android:defaultValue="12:00"
+
+            />
+
+    </PreferenceCategory>
+    -->
 
 </PreferenceScreen>

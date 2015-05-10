@@ -2,6 +2,10 @@ package com.pcr.myinfoweather.activities;
 
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +24,6 @@ import com.pcr.myinfoweather.network.APIClient;
 import com.pcr.myinfoweather.network.GoogleClient;
 import com.pcr.myinfoweather.network.WeatherParse;
 import com.pcr.myinfoweather.request.UserLocation;
-import com.pcr.myinfoweather.utils.Constants;
 import com.pcr.myinfoweather.utils.Intents;
 import com.pcr.myinfoweather.utils.UserSessionManager;
 import com.pcr.myinfoweather.utils.Validators;
@@ -89,11 +92,15 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         searchAddressField.setOnFocusChangeListener(this);
 
         GoogleClient.getInstance().setListener(this);
         GoogleClient.getInstance().getGoogleApiClient(this);
+
+        Log.i("Preferences", "getPrefs--> " + UserSessionManager.getSavedTemperaturePref(this));
 
         params = new Bundle();
 
@@ -136,16 +143,37 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     }
 
     @OnClick(R.id.searchAddressButton) void searchAddress() {
+        searchAddressesByTypedAddress();
+    }
 
+    private ArrayList<String> searchAddressesByTypedAddress() {
+        return UserLocation.getInstance(this).getAddress(getTypedAddress());
+    }
 
+    /**
+     * @param menu
+     * Accessing menu items --> settings menu
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(Intents.toSettingsActivity(this));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private String getTypedAddress() {
         return searchAddressField.getText().toString();
-    }
-
-    private java.util.List<android.location.Address> performAddressesList() {
-        return UserLocation.getInstance(this).getAddress(getTypedAddress(), Constants.NUMBER_OF_OCCURRENCES);
     }
 
     private String getUserPreferences() {
@@ -236,7 +264,7 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
         weatherWind.setText(getWindSpeed(user));
         weatherTitle.setText(user.getTitle());
         weatherIcon.setImageResource(user.getImage());
-        location.setText(user.getAddress().getCompleteAdress());
+        location.setText(user.getAddress().getCompleteAddress());
 
 
     }
