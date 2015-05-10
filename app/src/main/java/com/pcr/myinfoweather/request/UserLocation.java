@@ -4,11 +4,13 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 import android.util.Pair;
 
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
+import com.pcr.myinfoweather.exceptions.UserLocationException;
 import com.pcr.myinfoweather.network.GoogleClient;
 import com.pcr.myinfoweather.utils.Constants;
 import com.pcr.myinfoweather.utils.Validators;
@@ -44,16 +46,21 @@ public class UserLocation {
     }
 
     private Location getLastKnownLocation() {
+        Log.i("google play services: " , "..>" + getFusedLocationProviderApi().getLastLocation(GoogleClient.getInstance().getGoogleApiClient(mContext)));
         return getFusedLocationProviderApi().getLastLocation(GoogleClient.getInstance().getGoogleApiClient(mContext));
     }
 
     public Location getGPSInformation() {
         Location lastLocation = getLastKnownLocation();
-        double lat = lastLocation.getLatitude();
-        double lon = lastLocation.getLongitude();
+        if(lastLocation != null) {
+            double lat = lastLocation.getLatitude();
+            double lon = lastLocation.getLongitude();
 
-        lastLocation.setLatitude(lat);
-        lastLocation.setLongitude(lon);
+            lastLocation.setLatitude(lat);
+            lastLocation.setLongitude(lon);
+        } else {
+            lastLocation = null;
+        }
         return lastLocation;
     }
 

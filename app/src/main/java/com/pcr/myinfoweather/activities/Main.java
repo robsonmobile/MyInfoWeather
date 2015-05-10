@@ -181,11 +181,18 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     }
 
     private void performRequestByLocation() {
-        double lat = UserLocation.getInstance(this).getGPSInformation().getLatitude();
-        double lon = UserLocation.getInstance(this).getGPSInformation().getLongitude();
+        //implementar: se google play services
 
-        new APIClient().getWeatherByGPS().createWith(lat, lon, getUserPreferences(), callback);
-        System.out.println("log weatherAPIClient: " + weather);
+        if(UserLocation.getInstance(this).getGPSInformation() == null) {
+            startActivity(Intents.toPlaceholder(this));//placeholder for gps failure
+        } else {
+            double lat = UserLocation.getInstance(this).getGPSInformation().getLatitude();
+            double lon = UserLocation.getInstance(this).getGPSInformation().getLongitude();
+
+            new APIClient().getWeatherByGPS().createWith(lat, lon, getUserPreferences(), callback);
+            System.out.println("log weatherAPIClient: " + weather);
+        }
+
     }
 
     private void configureWeatherCallbackByLocation() {

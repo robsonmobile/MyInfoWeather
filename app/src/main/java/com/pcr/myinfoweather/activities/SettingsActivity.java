@@ -51,26 +51,13 @@ public class SettingsActivity extends ActionBarActivity implements Preference.On
         if(isCelsiusPreference()) {
             celsiusPreference.setChecked(true);
             fahrenheitPreference.setChecked(false);
-            fahrenheitPreference.setSummary("Celsius");
+            celsiusPreference.setSummary("Celsius unit type");
 
         } else {
             celsiusPreference.setChecked(false);
             fahrenheitPreference.setChecked(true);
-            fahrenheitPreference.setSummary("Fahrenheit");
+            fahrenheitPreference.setSummary("Fahrenheit unit type");
         }
-
-
-//        if(getPreference(Constants.PREF_TYPE_TEMPERATURE) == 0) {
-//            temperaturePref.setSummary("Celsius");
-//        } else if(getPreference(Constants.PREF_TYPE_TEMPERATURE) == 1) {
-//            temperaturePref.setSummary("Fahrenheit");
-//        }
-//
-//        long prefUpdateInterval = getPreference(Constants.PREF_TYPE_UPDATE_INTERVAL);
-//
-//        String updateInterval = convertUpdateInterval(prefUpdateInterval);
-//        System.out.println("log interval: " + updateInterval);
-//        updateIntervalPref.setSummary(updateInterval);
 
     }
 
@@ -94,22 +81,18 @@ public class SettingsActivity extends ActionBarActivity implements Preference.On
             if(celsiusPreference.isChecked()) {
                 fahrenheitPreference.setChecked(false);
                 celsiusPreference.setChecked(true);
-                celsiusPreference.setSummary("Celsius");
+                celsiusPreference.setSummary("Celsius unit type");
+                fahrenheitPreference.setSummary("Set temperature for Fahrenheit");
                 saveTemperaturePreference(Constants.UNIT_TYPE_CELSIUS);
-            } else {
-                fahrenheitPreference.setChecked(true);
-                celsiusPreference.setChecked(false);
             }
 
         } else if(preference.getKey().equals("temp_fahrenheit")) {
             if(fahrenheitPreference.isChecked()) {
                 fahrenheitPreference.setChecked(true);
                 celsiusPreference.setChecked(false);
-                fahrenheitPreference.setSummary("Fahrenheit");
+                fahrenheitPreference.setSummary("Fahrenheit unit type");
+                celsiusPreference.setSummary("Set temperature for Celsius");
                 saveTemperaturePreference(Constants.UNIT_TYPE_FAHRENHEIT);
-            } else {
-                fahrenheitPreference.setChecked(false);
-                celsiusPreference.setChecked(true);
             }
         }
         return false;
