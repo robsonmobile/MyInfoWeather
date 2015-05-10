@@ -13,19 +13,16 @@ android {
     }
 
     signingConfigs {
-
         debug {
-
             storePassword "android"
             keyAlias "androiddebugkey"
             keyPassword "android"
         }
-
         release {
-
             storePassword "weatherpass"
-            keyAlias "weather"
+            keyAlias 'weathers'
             keyPassword "weatherpass"
+            storeFile file('D:/Development/Android/Apps/keystores/keytore.jks')
         }
     }
 
@@ -34,7 +31,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL", "\"http://api.openweathermap.org\""
-            debuggable true
             signingConfig signingConfigs.release
             versionNameSuffix 'PROD - '
         }
