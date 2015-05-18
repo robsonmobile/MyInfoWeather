@@ -15,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.R;
-
 import com.pcr.myinfoweather.helpers.ConnectivityHelpers;
 import com.pcr.myinfoweather.models.currentweather.WeatherData;
 import com.pcr.myinfoweather.models.user.User;
@@ -24,6 +23,7 @@ import com.pcr.myinfoweather.network.APIClient;
 import com.pcr.myinfoweather.network.GoogleClient;
 import com.pcr.myinfoweather.network.WeatherParse;
 import com.pcr.myinfoweather.request.UserLocation;
+import com.pcr.myinfoweather.utils.Constants;
 import com.pcr.myinfoweather.utils.Intents;
 import com.pcr.myinfoweather.utils.UserSessionManager;
 import com.pcr.myinfoweather.utils.Validators;
@@ -116,13 +116,15 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     @Override
     protected void onResume() {
         super.onResume();
-
+        setViewsInvisibe(View.GONE);
         startLoading();
 
         if(!ConnectivityHelpers.hasConnectivity(this)) {
             stopLoading();
-            Intents.toPlaceholder(this);
+            startActivity(Intents.toPlaceholder(this, Constants.BAD_CONNECTION));
             //show place holder
+        } else if(!ConnectivityHelpers.hasGPS(this)) {
+            startActivity(Intents.toPlaceholder(this, Constants.GPS_OFF));
         }
     }
 
@@ -181,18 +183,10 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     }
 
     private void performRequestByLocation() {
-        //implementar: se google play services
-
-        if(UserLocation.getInstance(this).getGPSInformation() == null) {
-            startActivity(Intents.toPlaceholder(this));//placeholder for gps failure
-        } else {
             double lat = UserLocation.getInstance(this).getGPSInformation().getLatitude();
             double lon = UserLocation.getInstance(this).getGPSInformation().getLongitude();
 
             new APIClient().getWeatherByGPS().createWith(lat, lon, getUserPreferences(), callback);
-            System.out.println("log weatherAPIClient: " + weather);
-        }
-
     }
 
     private void configureWeatherCallbackByLocation() {
@@ -210,11 +204,10 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
 
             @Override
             public void failure(RetrofitError error) {
-                //fazer exception para erro// dispara mensagem ou dialog
-            //call placeholder
+
                 stopLoading();
                 Toast.makeText(Main.this, "failure call on callback", Toast.LENGTH_LONG).show();
-                startActivity(Intents.toPlaceholder(Main.this));
+                startActivity(Intents.toPlaceholder(Main.this, Constants.BAD_CONNECTION));
             }
         };
     }
@@ -222,7 +215,14 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     @Override
     public void onGoogleClientConnected(boolean isFinishedRequest) {
         if(isFinishedRequest) {
-            performRequestByLocation();
+            if(!ConnectivityHelpers.hasGPS(this)) {
+                startActivity(Intents.toPlaceholder(this, Constants.GPS_OFF));
+            } else if(!ConnectivityHelpers.hasConnectivity(this)) {
+                startActivity(Intents.toPlaceholder(this, Constants.BAD_CONNECTION));
+            } else {
+                performRequestByLocation();
+            }
+
         }
     }
 
@@ -236,13 +236,17 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
         loadingCurrentDate.setVisibility(View.VISIBLE);
 
         //Temperature text and Icons Invisible
-        tempMax.setVisibility(View.GONE);
-        tempMin.setVisibility(View.GONE);
-        weatherTitle.setVisibility(View.GONE);
-        weatherIcon.setVisibility(View.GONE);
-        weatherWind.setVisibility(View.GONE);
-        location.setVisibility(View.GONE);
-        currentDate.setVisibility(View.GONE);
+        setViewsInvisibe(View.GONE);
+    }
+
+    private void setViewsInvisibe(int gone) {
+        tempMax.setVisibility(gone);
+        tempMin.setVisibility(gone);
+        weatherTitle.setVisibility(gone);
+        weatherIcon.setVisibility(gone);
+        weatherWind.setVisibility(gone);
+        location.setVisibility(gone);
+        currentDate.setVisibility(gone);
     }
 
     private void stopLoading() {
@@ -254,13 +258,7 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
         loadingCurrentDate.setVisibility(View.GONE);
 
         //Temperature text and Icons Invisible
-        tempMax.setVisibility(View.VISIBLE);
-        tempMin.setVisibility(View.VISIBLE);
-        weatherTitle.setVisibility(View.VISIBLE);
-        weatherIcon.setVisibility(View.VISIBLE);
-        weatherWind.setVisibility(View.VISIBLE);
-        location.setVisibility(View.VISIBLE);
-        currentDate.setVisibility(View.VISIBLE);
+        setViewsInvisibe(View.VISIBLE);
     }
 
     private void setViews(User user) {
@@ -277,7 +275,7 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     }
 
     private String getWindSpeed(User user) {
-        return Validators.formatDecimal(user.getWindSpeed());
+        return Validators.formatDecimal(user.getWindSpeed()) + " km/h";
     }
 
     private String getMinTemperature(User user) {
@@ -309,7 +307,7 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
         if(UserSessionManager.hasTemperaturePref(this)) {
             return UserSessionManager.getSavedTemperaturePref(this);
         } else {
-            return "°C"; //posteriormente retornar� a unidade dependendo do lugar
+            return "°C"; //posteriormente retornar a unidade dependendo do lugar
         }
 
     }

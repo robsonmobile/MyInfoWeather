@@ -1,14 +1,13 @@
 package com.pcr.myinfoweather.activities;
 
-import android.media.Image;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-
+import android.widget.TextView;
+import android.widget.Toast;
 import com.pcr.myinfoweather.R;
-import com.pcr.myinfoweather.enums.PlaceholderChooser;
+import com.pcr.myinfoweather.helpers.ConnectivityHelpers;
+import com.pcr.myinfoweather.utils.Constants;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -18,15 +17,33 @@ import butterknife.OnClick;
  */
 public class PlaceholderActivity extends BaseActivity {
 
-    private ImageView placeholderImage;
-    private PlaceholderChooser placeholderChooser;
-
-    public PlaceholderActivity(PlaceholderChooser chooser) {
-        this.placeholderChooser = chooser;
-    }
+    private String choicePlaceholder;
 
     @InjectView(R.id.retryBtn) Button btnRetry;
     @InjectView(R.id.placeholder_image) ImageView image;
+    @InjectView(R.id.placeholder_text) TextView text;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                choicePlaceholder= null;
+            } else {
+                choicePlaceholder= extras.getString("type");
+            }
+        } else {
+            choicePlaceholder= (String) savedInstanceState.getSerializable("type");
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setPlaceholderImage(choicePlaceholder);
+    }
 
     @Override
     protected int layoutToInflate() {
@@ -39,7 +56,35 @@ public class PlaceholderActivity extends BaseActivity {
     }
 
     @OnClick(R.id.retryBtn) void retrySession() {
-        finish();
+        if(isGPSPlaceholder(choicePlaceholder)) {
+            if(hasGPSConnection()) {
+                finish();
+            } else {
+                Toast.makeText(this, Constants.TURN_ON_GPS, Toast.LENGTH_LONG).show();
+            }
+        } else if(isBadConnectionPlaceholder(choicePlaceholder)) {
+            if(hasInternetConnection()) {
+                finish();
+            } else {
+                Toast.makeText(this, Constants.TURN_ON_INTERNET, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private boolean hasInternetConnection() {
+        return ConnectivityHelpers.hasConnectivity(this);
+    }
+
+    private boolean hasGPSConnection() {
+        return ConnectivityHelpers.hasGPS(this);
+    }
+
+    private boolean isBadConnectionPlaceholder(String choicePlaceholder) {
+        return choicePlaceholder.equals(Constants.BAD_CONNECTION);
+    }
+
+    private boolean isGPSPlaceholder(String choicePlaceholder) {
+        return choicePlaceholder.equals(Constants.GPS_OFF);
     }
 
     @Override
@@ -48,12 +93,14 @@ public class PlaceholderActivity extends BaseActivity {
         super.onBackPressed();
     }
 
-//    private void showPlaceholderImage(PlaceholderChooser choosed){
-//        if( == 0) {
-//            image.setImageResource(R.drawable.ic_launcher);
-//        } else if(imageChooser == 1) {
-//            image.setImageResource(R.drawable.ic_launcher);
-//        }
-//
-//    }
+    private void setPlaceholderImage(String chooser){
+        if(isGPSPlaceholder(chooser)) {
+            image.setImageResource(R.drawable.no_gps_image);
+            text.setText(Constants.GPS_CONNECTION_FAILURE);
+        } else if(isBadConnectionPlaceholder(chooser)) {
+            image.setImageResource(R.drawable.no_connection_image);
+            text.setText(Constants.INTERNET_CONNECTION_FAILURE);
+        }
+
+    }
 }

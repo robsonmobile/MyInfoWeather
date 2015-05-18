@@ -75,5 +75,15 @@ public class Constants {
 
     public static final String ADDRESS_NOT_FOUND = "Address not found";
 
+    /***Connections feedback***/
+    public static final String GPS_CONNECTION_FAILURE = "Unable to find GPS, plese verify";
+    public static final String INTERNET_CONNECTION_FAILURE = "Unable to connect to the server";
+
+    /***Connections feedback***/
+    public static final String BAD_CONNECTION = "bad_connection";
+    public static final String GPS_OFF = "gps_off";
+
+    public static final String TURN_ON_INTERNET = "Please verify your internet connection";
+    public static final String TURN_ON_GPS = "Please verify if your gps is off";
 
 }

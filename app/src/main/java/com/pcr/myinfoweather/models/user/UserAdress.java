@@ -60,17 +60,17 @@ public class UserAdress {
         if(!isNullAddress(getCity())) {
             city = getCity();
         } else {
-            city = "";
+            city = "City not found";
         }
         if(!isNullAddress(getState())) {
             state = getState();
         } else {
-            state = "";
+            state = "state not found";
         }
         if(!isNullAddress(getCountry())) {
             country = getCountry();
         } else {
-            country = "";
+            country = "country not found";
         }
         if(Validators.isNull(getCity()) && Validators.isNull(getState()) &&
                 Validators.isNull(getCountry())) {

@@ -1,8 +1,11 @@
 package com.pcr.myinfoweather.helpers;
 
 import android.content.Context;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import com.pcr.myinfoweather.request.UserLocation;
 
 /**
  * Created by Paula Rosa on 24/03/2015.
@@ -25,5 +28,10 @@ public class ConnectivityHelpers {
 
     public static boolean isMobile(NetworkInfo activeNetwork) {
         return activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE;
+    }
+
+    public static boolean hasGPS(Context context) {
+        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE );
+        return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 }

@@ -8,17 +8,26 @@
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_gravity="center"
+        android:layout_weight="1"
         android:src="@drawable/ic_launcher"/>
 
     <TextView
+        android:id="@+id/placeholder_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Connection Failure , press retry "/>
+        android:layout_weight="1"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:text=""/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Retry"
+        android:layout_margin="20dp"
+        android:background="@drawable/btn_highlight_no_border"
+        android:textColor="@android:color/white"
         android:id="@+id/retryBtn"/>
 
 </LinearLayout>
