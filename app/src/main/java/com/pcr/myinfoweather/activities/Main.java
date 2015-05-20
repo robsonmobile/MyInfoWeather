@@ -148,7 +148,7 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
         searchAddressesByTypedAddress();
     }
 
-    private ArrayList<String> searchAddressesByTypedAddress() {
+    private ArrayList<UserAdress> searchAddressesByTypedAddress() {
         return UserLocation.getInstance(this).getAddress(getTypedAddress());
     }
 
