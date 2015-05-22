@@ -122,17 +122,25 @@ public class UserLocation {
 
                     String x = addresses.getSubAdminArea();
                     UserAdress user = new UserAdress();
-                    user.setCity(x);
+
+                    user.setCity(addresses.getSubAdminArea());
+                    user.setState(addresses.getAdminArea());
+                    user.setCountry(addresses.getCountryCode());
+
                     address.add(i, user);//tem que ser passado um objeto do tipo user
-                    address.get(i).setCity(addresses.getSubAdminArea());
-                    address.get(i).setState(addresses.getAdminArea());
-                    address.get(i).setCountry(addresses.getCountryCode());
-                    Log.i("Log Address", "--> " + address);
+//                    address.get(i).setCity(addresses.getSubAdminArea());
+//                    address.get(i).setState(addresses.getAdminArea());
+//                    address.get(i).setCountry(addresses.getCountryCode());
+                    Log.i("Log Address", "--> " + address.get(i).getCity());
 
 
 
                 }
-                Log.i("Log Address final", "--> " + address);
+                for(UserAdress address1: address) {
+                    Log.i("Log Address final", "--> " + address1.getCity() + " - "
+                    + address1.getState() + " - " + address1.getCountry());
+                }
+
                 return address;
 
             }
