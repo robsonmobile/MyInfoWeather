@@ -56,6 +56,8 @@ public class WeatherParse {
 
     public static UserAdress parseAddress(ArrayList<String> address) {
         if(address != null) {
+            //quando um dos itens de endereço estiver nulo , deverá ser feita uma nova requisição por
+            //pelo menos 3x
             return UserAdress.newBuilder()
                     .withCity(address.get(Constants.CITY))
                     .withState(address.get(Constants.STATE))

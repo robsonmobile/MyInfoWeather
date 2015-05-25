@@ -1,7 +1,11 @@
 package com.pcr.myinfoweather.activities;
 
+import android.content.Intent;
+import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.R;
+import com.pcr.myinfoweather.adapters.SearchResultListAdapter;
 import com.pcr.myinfoweather.helpers.ConnectivityHelpers;
 import com.pcr.myinfoweather.models.currentweather.WeatherData;
 import com.pcr.myinfoweather.models.user.User;
@@ -29,6 +34,7 @@ import com.pcr.myinfoweather.utils.UserSessionManager;
 import com.pcr.myinfoweather.utils.Validators;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -44,6 +50,8 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     private Bundle params;
     private Callback<String> callback;
     private WeatherData weather;
+    private RecyclerView.LayoutManager layoutManager;
+    private SearchResultListAdapter adapterSearch;
 
     // -----------------------------------------------------------------------------------
     // Loading Views
@@ -71,6 +79,8 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     // -----------------------------------------------------------------------------------
     @InjectView(R.id.searchAddressField) EditText searchAddressField;
     @InjectView(R.id.searchAddressButton) Button searchAddressButton;
+    @InjectView(R.id.addressResultList) RecyclerView searchResultList;
+    @InjectView(R.id.searchResultLayout) LinearLayout searchResultLayout;
 
     // -----------------------------------------------------------------------------------
     // TabBar Views
@@ -96,12 +106,22 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
         setSupportActionBar(toolbar);
 
         searchAddressField.setOnFocusChangeListener(this);
+        layoutManager = new LinearLayoutManager(this);
+        searchResultList.setLayoutManager(layoutManager);
+
+        searchResultLayout.setVisibility(View.GONE);
+        List<UserAdress> list = new ArrayList<>();
+        UserAdress userAdress = new UserAdress();
+        userAdress.setCity("teste");
+        list.add(userAdress);
+        adapterSearch = new SearchResultListAdapter(list);
+        searchResultList.setAdapter(adapterSearch);
 
         GoogleClient.getInstance().setListener(this);
         GoogleClient.getInstance().getGoogleApiClient(this);
 
         Log.i("Preferences", "getPrefs--> " + UserSessionManager.getSavedTemperaturePref(this));
-
+        //showSearchItens(searchAddressesByTypedAddress());
         params = new Bundle();
 
     }
@@ -145,7 +165,9 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     }
 
     @OnClick(R.id.searchAddressButton) void searchAddress() {
-        searchAddressesByTypedAddress();
+        //searchAddressesByTypedAddress();
+        showSearchItens(searchAddressesByTypedAddress());
+        //startActivity(new Intent(this, TesteCardActivity.class));
     }
 
     private ArrayList<UserAdress> searchAddressesByTypedAddress() {
@@ -271,7 +293,6 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
         weatherIcon.setImageResource(user.getImage());
         location.setText(user.getAddress().getCompleteAddress());
 
-
     }
 
     private String getWindSpeed(User user) {
@@ -318,5 +339,14 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
         if(v.getId() == R.id.searchAddressField && hasFocus) {
             weatherContainerLayout.setVisibility(View.GONE);
         }
+    }
+
+    private void showSearchItens(ArrayList<UserAdress> addressList) {
+
+        adapterSearch = new SearchResultListAdapter(addressList);
+        searchResultList.setAdapter(adapterSearch);
+        adapterSearch.notifyDataSetChanged();
+        searchResultLayout.setVisibility(View.VISIBLE);
+
     }
 }

@@ -4,23 +4,17 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.util.Log;
-import android.util.Pair;
 
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationServices;
-import com.pcr.myinfoweather.exceptions.UserLocationException;
 import com.pcr.myinfoweather.models.user.UserAdress;
 import com.pcr.myinfoweather.network.GoogleClient;
-import com.pcr.myinfoweather.utils.Constants;
 import com.pcr.myinfoweather.utils.Validators;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * Created by Paula on 04/12/2014.
@@ -100,49 +94,41 @@ public class UserLocation {
 
     public ArrayList<UserAdress> getAddress(String typedAddress) {
         typedAddress = "sao car";
-        typedAddress = Validators.removeAccents(typedAddress);
+
+        typedAddress = removeAccents(typedAddress);
 
         ArrayList<UserAdress> address = new ArrayList<>();
         int occurrencesNumber = 20;
+        Address addresses = null;
 
         try {
             List<Address> listLocation = getGeocoder().getFromLocationName(typedAddress,
                     occurrencesNumber);
 
-            Address addresses = null;
-
             if(listLocation.size() == 0) {
-                //erro - generate a toast or message for user like "address not found"
-                //address.add();
                 Log.i("Log Address", "--> " + address);
             }
             if (listLocation != null && listLocation.size() > 0) {
                 for (int i = 0; i < listLocation.size(); i++) {
                     addresses = listLocation.get(i);
 
-                    String x = addresses.getSubAdminArea();
                     UserAdress user = new UserAdress();
 
-                    user.setCity(addresses.getSubAdminArea());
-                    user.setState(addresses.getAdminArea());
-                    user.setCountry(addresses.getCountryCode());
+                    String city = addresses.getSubAdminArea();
+                    String state = addresses.getAdminArea();
+                    String country = addresses.getCountryCode();
 
-                    address.add(i, user);//tem que ser passado um objeto do tipo user
-//                    address.get(i).setCity(addresses.getSubAdminArea());
-//                    address.get(i).setState(addresses.getAdminArea());
-//                    address.get(i).setCountry(addresses.getCountryCode());
-                    Log.i("Log Address", "--> " + address.get(i).getCity());
+                    if(!isAddressNull(city) && !isAddressNull(state) && !isAddressNull(country)) {
+                        user.setCity(city);
+                        user.setState(state);
+                        user.setCountry(country);
 
-
-
+                        address.add(user);
+                    } else {
+                        //user.setCompleteAdress("Address not found");
+                    }
                 }
-                for(UserAdress address1: address) {
-                    Log.i("Log Address final", "--> " + address1.getCity() + " - "
-                    + address1.getState() + " - " + address1.getCountry());
-                }
-
                 return address;
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,6 +138,14 @@ public class UserLocation {
 
         return null;
 
+    }
+
+    private String removeAccents(String typedAddress) {
+        return Validators.removeAccents(typedAddress);
+    }
+
+    private boolean isAddressNull(String city) {
+        return Validators.isNull(city);
     }
 }
 
