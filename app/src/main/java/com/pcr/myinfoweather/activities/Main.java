@@ -30,7 +30,7 @@ import com.pcr.myinfoweather.utils.Validators;
 
 import java.util.ArrayList;
 
-import butterknife.InjectView;
+import butterknife.Bind;
 import butterknife.OnClick;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -48,35 +48,35 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     // -----------------------------------------------------------------------------------
     // Loading Views
     // -----------------------------------------------------------------------------------
-    @InjectView(R.id.loadingMaxTemp) View loadingMaxTemp;
-    @InjectView(R.id.loadingMinTemp) View loadingMinTemp;
-    @InjectView(R.id.loadingImageWeather) View loadingWeatherImage;
-    @InjectView(R.id.loadingWind) View loadingWind;
-    @InjectView(R.id.loadingLocation) View loadingLocation;
-    @InjectView(R.id.loadingCurrentDate) View loadingCurrentDate;
+    @Bind(R.id.loadingMaxTemp) View loadingMaxTemp;
+    @Bind(R.id.loadingMinTemp) View loadingMinTemp;
+    @Bind(R.id.loadingImageWeather) View loadingWeatherImage;
+    @Bind(R.id.loadingWind) View loadingWind;
+    @Bind(R.id.loadingLocation) View loadingLocation;
+    @Bind(R.id.loadingCurrentDate) View loadingCurrentDate;
 
     // -----------------------------------------------------------------------------------
     // Weather Views
     // -----------------------------------------------------------------------------------
-    @InjectView(R.id.weatherTempMax) TextView tempMax;
-    @InjectView(R.id.weatherTempMin) TextView tempMin;
-    @InjectView(R.id.weatherTitle) TextView weatherTitle;
-    @InjectView(R.id.weatherIcon) ImageView weatherIcon;
-    @InjectView(R.id.weatherWind) TextView weatherWind;
-    @InjectView(R.id.weatherCurrentDate) TextView weatherCurrentDate;
-    @InjectView(R.id.weatherContainer) LinearLayout weatherContainerLayout;
+    @Bind(R.id.weatherTempMax) TextView tempMax;
+    @Bind(R.id.weatherTempMin) TextView tempMin;
+    @Bind(R.id.weatherTitle) TextView weatherTitle;
+    @Bind(R.id.weatherIcon) ImageView weatherIcon;
+    @Bind(R.id.weatherWind) TextView weatherWind;
+    @Bind(R.id.weatherCurrentDate) TextView weatherCurrentDate;
+    @Bind(R.id.weatherContainer) LinearLayout weatherContainerLayout;
 
     // -----------------------------------------------------------------------------------
     // Search Views
     // -----------------------------------------------------------------------------------
-    @InjectView(R.id.searchAddressField) EditText searchAddressField;
-    @InjectView(R.id.searchAddressButton) Button searchAddressButton;
+    @Bind(R.id.searchAddressField) EditText searchAddressField;
+    @Bind(R.id.searchAddressButton) Button searchAddressButton;
 
     // -----------------------------------------------------------------------------------
     // TabBar Views
     // -----------------------------------------------------------------------------------
-    @InjectView(R.id.weatherLocationText) TextView location;
-    @InjectView(R.id.weatherCurrentDate) TextView currentDate;
+    @Bind(R.id.weatherLocationText) TextView location;
+    //@Bind(R.id.weatherCurrentDate) TextView currentDateNow;
 
     @Override
     protected int layoutToInflate() {
@@ -121,10 +121,10 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
 
         if(!ConnectivityHelpers.hasConnectivity(this)) {
             stopLoading();
-            startActivity(Intents.toPlaceholder(this, Constants.BAD_CONNECTION));
+            Toast.makeText(Main.this, "conexao ruim", Toast.LENGTH_LONG).show();
             //show place holder
         } else if(!ConnectivityHelpers.hasGPS(this)) {
-            startActivity(Intents.toPlaceholder(this, Constants.GPS_OFF));
+            Toast.makeText(Main.this, "sem gps", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -207,7 +207,6 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
 
                 stopLoading();
                 Toast.makeText(Main.this, "failure call on callback", Toast.LENGTH_LONG).show();
-                startActivity(Intents.toPlaceholder(Main.this, Constants.BAD_CONNECTION));
             }
         };
     }
@@ -216,9 +215,9 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
     public void onGoogleClientConnected(boolean isFinishedRequest) {
         if(isFinishedRequest) {
             if(!ConnectivityHelpers.hasGPS(this)) {
-                startActivity(Intents.toPlaceholder(this, Constants.GPS_OFF));
+                Toast.makeText(Main.this, "SEM GPS", Toast.LENGTH_LONG).show();
             } else if(!ConnectivityHelpers.hasConnectivity(this)) {
-                startActivity(Intents.toPlaceholder(this, Constants.BAD_CONNECTION));
+                Toast.makeText(Main.this, "SEM CONEXÃO", Toast.LENGTH_LONG).show();
             } else {
                 performRequestByLocation();
             }
@@ -246,7 +245,7 @@ public class Main extends BaseActivity implements GoogleClient.IListenerLocation
         weatherIcon.setVisibility(gone);
         weatherWind.setVisibility(gone);
         location.setVisibility(gone);
-        currentDate.setVisibility(gone);
+
     }
 
     private void stopLoading() {
