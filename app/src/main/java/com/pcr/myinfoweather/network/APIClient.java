@@ -1,13 +1,13 @@
 package com.pcr.myinfoweather.network;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.pcr.myinfoweather.BuildConfig;
+import com.pcr.myinfoweather.interfaces.WeatherApi;
+import com.pcr.myinfoweather.models.currentweather.Response;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
-import retrofit.converter.GsonConverter;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
@@ -17,6 +17,7 @@ import retrofit.http.Query;
 public class APIClient {
 
     private static RestAdapter REST_ADAPTER;
+    private WeatherApi weatherApi;
     private static Gson gson = new Gson();
 
     private static void createAdapterIfNeeded() {
@@ -33,6 +34,20 @@ public class APIClient {
                     .setClient(new OkClient())
                     .build();
         }
+    }
+
+    private void createWeatherApi() {
+        weatherApi = REST_ADAPTER.create(WeatherApi.class);
+    }
+
+    public void requestWeatherByAddress(String city, String unit, String appId, Callback<Response> callback) {
+        createWeatherApi();
+        weatherApi.requestWeatherByAddress(city, unit, appId, callback);
+    }
+
+    public void requestWeatherLocation(double lat, double lon, String unit, String appId, Callback<String>callback) {
+        createWeatherApi();
+        weatherApi.requestWeatherByLocation(lat, lon, unit, appId, callback);
     }
 
     public APIClient() {
@@ -64,6 +79,5 @@ public class APIClient {
                 Callback<String> callback
         );
     }
-
 
 }

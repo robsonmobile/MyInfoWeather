@@ -24,7 +24,7 @@
             android:value="AIzaSyBT5hV4nfrN3sXz4P3Wa9Qm0_whIP7lB3k"/>
 
         <activity
-            android:name=".activities.Main"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

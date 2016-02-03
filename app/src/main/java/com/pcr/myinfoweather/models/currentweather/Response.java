@@ -8,6 +8,7 @@ import java.util.List;
  * Created by Paula Rosa on 31/03/2015.
  */
 public class Response {
+
     @SerializedName("coord")
     private List<WeatherData> weatherDataList;
 

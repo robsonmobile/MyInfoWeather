@@ -86,4 +86,9 @@ public class Constants {
     public static final String TURN_ON_INTERNET = "Please verify your internet connection";
     public static final String TURN_ON_GPS = "Please verify if your gps is off";
 
+    /**************************
+     * AppKey
+     **************************/
+    public static final String APPKEY = "99242a26f5a3313a128400a17821d91a";
+
 }
