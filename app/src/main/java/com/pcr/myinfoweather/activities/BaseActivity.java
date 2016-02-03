@@ -25,7 +25,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         setContentView(layoutToInflate());
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
     }
 
     @Override
